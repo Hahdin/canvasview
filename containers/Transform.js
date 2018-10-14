@@ -7,7 +7,6 @@ class Transform extends Component {
       canvas: null
     }
   }
-
   componentDidMount() {
     //_myLogCanvas.initLog(this.state.curves)
     let _t = new transforms()

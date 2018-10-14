@@ -10,5 +10,4 @@ const routes = (
     </Switch>
   </BrowserRouter>
 );
-
 ReactDOM.render(routes, document.getElementById('root'))

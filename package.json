@@ -4,8 +4,8 @@
   "description": "",
   "private": true,
   "scripts": {
-    "dev": "webpack && babel-node --presets @babel/preset-env server.js",
-    "start": "webpack-dev-server --open"
+    "start": "webpack && babel-node --presets @babel/preset-env server.js",
+    "dev": "webpack-dev-server --open"
   },
   "author": "",
   "license": "ISC",

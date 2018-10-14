@@ -4,7 +4,7 @@
   "description": "",
   "private": true,
   "scripts": {
-    "heroku-prebuild": "webpack-cli && webpack -p --config ./webpack.config.js --progress",
+    "heroku-postbuild": "webpack -p",
     "start_dev": "babel-node --presets @babel/preset-env server.js",
     "dev": "webpack-dev-server --open",
     "clean": "rm -rf build && mkdir build",

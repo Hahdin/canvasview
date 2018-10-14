@@ -4,10 +4,11 @@
   "description": "",
   "private": true,
   "scripts": {
+    "heroku-prebuild": "webpack",
     "start_dev": "babel-node --presets @babel/preset-env server.js",
     "dev": "webpack-dev-server --open",
-    "clean1": "rm -rf build && mkdir build",
-    "clean": "mkdir build",
+    "clean": "rm -rf build && mkdir build",
+    "clean1": "mkdir build",
     "build-babel": "babel -d ./build --presets @babel/preset-env server.js", 
     "build": "npm run clean && npm run build-babel",
     "start": "npm run build && node ./build/server.js"

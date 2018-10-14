@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 //import myCanvas from '../classes/myCanvas'
-import Volcano from '../classes/Volcano'
+import Volcano from '../classes/volcano'
 
 
 class MathCanvas extends Component {

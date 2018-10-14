@@ -2,7 +2,7 @@ const dat = require('dat.gui');
 import lib from './lib'
 let cc = 0
 
-class Transform {
+export class Transform {
   constructor(props) {
     this.state = {
       innerWidth: 0,

@@ -1,7 +1,7 @@
 const dat = require('dat.gui');
 import lib from './lib'
 //import Flock from './boid'
-class Connect {
+export class Connect {
   constructor(props) {
     this.state = {
       innerWidth: 0,

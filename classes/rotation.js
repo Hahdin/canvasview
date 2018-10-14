@@ -1,6 +1,6 @@
 import { GUI } from 'dat.gui';
 import lib from './lib'
-class Rotation {
+export class Rotation {
   constructor(props) {
     this.state = {
       innerWidth: 0,

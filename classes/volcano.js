@@ -1,6 +1,6 @@
 const dat = require('dat.gui');
 import lib from './lib'
-class Volcano {
+export class Volcano {
   constructor(props) {
     this.state = {
       innerWidth: 0,

@@ -1,6 +1,6 @@
 const dat = require('dat.gui');
 import lib from './lib'
-class Explosion {
+export class Explosion {
   constructor(props) {
     this.state = {
       innerWidth: 0,

@@ -1,5 +1,5 @@
 const dat = require('dat.gui');
-class myCanvas {
+export class myCanvas {
   constructor(props) {
     this.state = {
       innerWidth: 0,

@@ -96,7 +96,7 @@ const FKSystem = FKSystem || {
 
 
 
-class KinCanvas {
+export class KinCanvas {
   constructor(props) {
     this.state = {
       innerWidth: 0,

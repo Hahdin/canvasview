@@ -1,5 +1,5 @@
 import lib from './lib'
-class logCanvas {
+export class logCanvas {
   constructor(props) {
     this.state = {
       innerWidth: 0,

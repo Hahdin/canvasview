@@ -140,7 +140,7 @@ class Boid {
     // this.color = `rgb(${~~(Math.random() * 255)},${~~(Math.random() * 255)}, ${~~(Math.random() * 255)} )`
   }
 }
-class Flock {
+export class Flock {
   constructor(flockSize, center) {
     this.boids = [];
     this.neighborDistance = 10;

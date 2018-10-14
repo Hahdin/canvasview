@@ -1,0 +1,23 @@
+.link:link,.link:visited, a:link, a:visited {
+  background-color: #f44336;
+  color: white;
+  padding: 14px 25px;
+  text-align: center; 
+  text-decoration: none;
+  display: inline-block;
+  box-shadow: 2px 2px 2px black;
+}
+
+.link:hover, .link:active, a:hover, a:active {
+  background-color: rgb(0, 119, 255);
+  
+}
+.link:focus, a:focus {
+  background-color: rgb(238, 255, 5);
+  color: black;
+}
+
+h1 {
+  color: rgb(248, 18, 18);
+  text-shadow: 2px 2px 2px black;
+}

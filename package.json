@@ -6,8 +6,9 @@
   "scripts": {
     "start_dev": "babel-node --presets @babel/preset-env server.js",
     "dev": "webpack-dev-server --open",
-    "clean": "rm -rf build && mkdir build",
-    "build-babel": "webpack && babel -d ./build --presets @babel/preset-env server.js", 
+    "clean1": "rm -rf build && mkdir build",
+    "clean": "mkdir build",
+    "build-babel": "babel -d ./build --presets @babel/preset-env server.js", 
     "build": "npm run clean && npm run build-babel",
     "start": "npm run build && node ./build/server.js"
   },

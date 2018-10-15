@@ -9,7 +9,6 @@ class TheGame extends Component {
   }
   componentDidMount() {
     let myGOL = new GOL()
-    //myGOL._fill('rgba(255,255,255, 1)', 0, 0)
     myGOL.initCanvas()
     myGOL.start()
     this.state.canvas = myGOL

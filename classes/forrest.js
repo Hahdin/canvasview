@@ -28,7 +28,6 @@ export class Forrest {
     this.state.gui.destroy()
   }
   initCanvas() {
-
     this.state.canvas = document.getElementById("canvas")
     this.state.innerHeight = this.state.canvas.innerHeight = this.state.canvas.height = window.innerHeight * 0.9
     this.state.innerWidth = this.state.canvas.innerWidth = this.state.canvas.width = window.innerWidth * 0.9
@@ -98,7 +97,6 @@ export class Forrest {
   }
   drawBranches() {
     let new_start_points = [];
-    //this.state.ctx.beginPath();
     let z = this.state.start_points.length;
     let point_index = 0
     if (z > this.state.max_branches) {
@@ -131,15 +129,12 @@ export class Forrest {
       z--
     }
     this.state.start_points = new_start_points;
-
     //reducing line_width and length
     this.state._length *= this.state.length_reduction;
     this.state.line_width *= 0.9;
     this.state.ctx.lineWidth = this.state.line_width;
-
     //change in divergence
     this.state.divergence = (Math.random() > 0.5) ? this.state.divergence * 0.8 : this.state.divergence * 1.03
-
     //recursive call - only if length is more than 2.
     //Else it will fall in an long loop
     if (this.state.drawTimer) {
@@ -160,7 +155,6 @@ export class Forrest {
         if (this.state._length < 5) {
           if (this.state._length > 2) {
             this.state.ctx.strokeStyle =
-           // `hsla(${80 + Math.round(Math.random() * 70)},
             `hsla(${ Math.round(Math.random() * 360)},
             ${Math.round(80 + Math.random() * 20)}%,
             ${Math.round(Math.random() * 80)}%,
@@ -168,7 +162,6 @@ export class Forrest {
             return
           } else {
             this.state.ctx.strokeStyle =
-           // `hsla(${80 + Math.round(Math.random() * 70)},
             `hsla(${ Math.round(Math.random() * 360)},
             ${Math.round(80 + Math.random() * 20)}%,
             ${Math.round(Math.random() * 80)}%,
@@ -188,7 +181,6 @@ export class Forrest {
       if (sZ === inc)
         inc = 1
     }
-
   }
   get_endpoint(x, y, a, length) {
     //This function will calculate the end points based on simple vectors

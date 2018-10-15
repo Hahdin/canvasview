@@ -39,11 +39,8 @@ const Arm = Arm ||{
   render: function(ctx){
     ctx.strokeStyle = this.color
     ctx.lineWidth = 5
-    //ctx.beginPath()
-    //ctx.moveTo(this.x, this.y)
     console.log('render arm', this.getEndX(), this.getEndY(), this)
     lib.lineTo(ctx, this.x, this.y, this.getEndX(), this.getEndY())
-    //ctx.stroke()
   }
 }
 
@@ -74,12 +71,9 @@ const FKSystem = FKSystem || {
       if (arm.parent){
         arm.x = arm.parent.getEndX()
         arm.y = arm.parent.getEndY()
-        //console.log('child arm', arm)
-      
       } else{
         arm.x = this.x
         arm.y = this.y
-        //console.log('parent arm', arm)
       }
     })
   },
@@ -93,8 +87,6 @@ const FKSystem = FKSystem || {
     this.arms[index].length = length
   }
 } 
-
-
 
 export class KinCanvas {
   constructor(props) {
@@ -133,7 +125,6 @@ export class KinCanvas {
       colorChange: 0.2,
       lineWidth: 0.1,
       opacity: 0.5
-
     }
      this.cleanup = this.cleanup.bind(this)
   }
@@ -141,7 +132,6 @@ export class KinCanvas {
     this.state.gui.destroy()
   }
   initCanvas() {
-
     this.state.canvas = document.getElementById("canvas")
     this.state.innerHeight = this.state.canvas.innerHeight = this.state.canvas.height = window.innerHeight * 0.9
     this.state.innerWidth = this.state.canvas.innerWidth = this.state.canvas.width = window.innerWidth * 0.9
@@ -160,7 +150,6 @@ export class KinCanvas {
       mod2: this.state.mod2,
       mod3: this.state.mod3,
       angleChange: this.state.angleChange,
-     // lineColor: this.state.lineColor,
       arm1Length: this.state.arm1Length,
       arm2Length: this.state.arm2Length,
       arm3Length: this.state.arm3Length,
@@ -168,37 +157,30 @@ export class KinCanvas {
       colorChange : this.state.colorChange,
       lineWidth: this.state.lineWidth,
       opacity: this.state.opacity
-      // mod4: this.state.mod4,
     }
 
     this.state.gui.add(controller, 'mod1', -10, 10).step(0.01).name('Angle 1 mod.').onChange((value) => {
       if (this.state.mod1 === value) return
-      //this.state.ctx.clearRect(0,0,this.state.innerWidth, this.state.innerHeight)
       this.state.mod1 = value
     })
     this.state.gui.add(controller, 'mod2', -10, 10).step(0.01).name('Angle 2 mod.').onChange((value) => {
       if (this.state.mod2 === value) return
-      //this.state.ctx.clearRect(0,0,this.state.innerWidth, this.state.innerHeight)
       this.state.mod2 = value
     })
     this.state.gui.add(controller, 'mod3', -10, 10).step(0.01).name('Angle 3 mod.').onChange((value) => {
       if (this.state.mod3 === value) return
-      //this.state.ctx.clearRect(0,0,this.state.innerWidth, this.state.innerHeight)
       this.state.mod3 = value
     })
     this.state.gui.add(controller, 'arm1Length', 0, 200).step(10).name('Arm 1 length').onChange((value) => {
       if (this.state.arm1Length === value) return
-      //this.state.ctx.clearRect(0,0,this.state.innerWidth, this.state.innerHeight)
       this.state.arm1Length = value
     })
     this.state.gui.add(controller, 'arm2Length', 0, 200).step(10).name('Arm 2 length').onChange((value) => {
       if (this.state.arm2Length === value) return
-      //this.state.ctx.clearRect(0,0,this.state.innerWidth, this.state.innerHeight)
       this.state.arm2Length = value
     })
     this.state.gui.add(controller, 'arm3Length', 0, 200).step(10).name('Arm 3 length').onChange((value) => {
       if (this.state.arm3Length === value) return
-      //this.state.ctx.clearRect(0,0,this.state.innerWidth, this.state.innerHeight)
       this.state.arm3Length = value
     })
     this.state.gui.add(controller, 'animationSpeed', 2, 100).step(2).name('Redraw ms').onChange((value) => {
@@ -207,7 +189,6 @@ export class KinCanvas {
     })
     this.state.gui.add(controller, 'angleChange', 0, Math.PI).step(0.01).name('Rate of Change').onChange((value) => {
       if (this.state.angleChange === value) return
-      //this.state.ctx.clearRect(0,0,this.state.innerWidth, this.state.innerHeight)
       this._fill('rgba(0,0,0, 1)', 0, 0)
       this.state.angleChange = value
     })
@@ -223,29 +204,6 @@ export class KinCanvas {
       if (this.state.opacity === value) return
       this.state.opacity = value
     })
-    
-    // this.state.gui.add(controller, 'angleChange', 0, Math.PI).step(0.01).name('Rate of Change').onChange((value) => {
-    //   if (this.state.angleChange === value) return
-    //   this.state.ctx.clearRect(0,0,this.state.innerWidth, this.state.innerHeight)
-    //   this.state.angleChange = value
-    // })
-    // this.state.gui.addColor(controller, "lineColor").name('Zone Color').onChange((value) =>{
-    //   this.state.lineColor = value
-      
-    // })
-    // this.state.gui.add(controller, 'mod4', 0.01, 100).step(0.01).name('Angle 4 mod.').onChange((value) => {
-    //   if (this.state.mod4 === value) return
-    //   this.state.ctx.clearRect(0,0,this.state.innerWidth, this.state.innerHeight)
-    //   this.state.mod4 = value
-    // })
-    // this.state.gui.add(controller, 'density', 1, 500).step(1).name('Density').onChange((value) => {
-    //   if (this.state.density === value) return
-    //   this.state.density = value
-    // })
-    // this.state.gui.add(controller, 'velocity', 1, 100).step(2).name('Velocity').onChange((value) => {
-    //   if (this.state.velocity === value) return
-    //   this.state.velocity = value
-    // })
   }
   fade() {
     lib.cvFade(this.state.ctx,'rgba(0,0,0, 0.1)',this.state.innerWidth, this.state.innerHeight)
@@ -255,11 +213,7 @@ export class KinCanvas {
     clearInterval(this.state.drawTimer)
   }
   start() {
-    console.log('starting kinematics')
-
-     this.draw.bind(this)
-    // this.drawParticles.bind(this)
-
+    this.draw.bind(this)
     this.state.drawTimer = setInterval(() =>{
       let count = 30
       while(count--){
@@ -267,8 +221,6 @@ export class KinCanvas {
         this.draw()
       }
     }, this.state.animationSpeed)
-
-    //this.state.fadeTimer = setInterval(this.fade.bind(this), 200)
   }
   updateRainbow(){
     let change = this.state.colorChange
@@ -289,7 +241,7 @@ export class KinCanvas {
       this.state.rainbow.r += change//full red
     }else if (this.state.rainbow.change > 255 *3 && this.state.rainbow.change <= 255 * 4){
       this.state.rainbow.g += change//full red + green
-      this.state.rainbow.b = 0//this.state.rainbow.r += change
+      this.state.rainbow.b = 0//
     }else if (this.state.rainbow.change > 255 *4 && this.state.rainbow.change <= 255 * 5){
       this.state.rainbow.b += change
       this.state.rainbow.r -= change//full blue + green
@@ -299,7 +251,6 @@ export class KinCanvas {
     }else if (this.state.rainbow.change > 255 *7 && this.state.rainbow.change <= 255 * 8){
       this.state.rainbow.g = 0
       this.state.rainbow.b -= change// full red
-      //this.state.rainbow.r += change
     } else{
       this.state.rainbow.change = 0
     }
@@ -307,21 +258,7 @@ export class KinCanvas {
   }
 
   draw(){
-    // let lastX, lastY
-    // this.state.arms.forEach((arm) =>{
-    //   this.state.ctx.clearRect(0,0,this.state.innerWidth, this.state.innerHeight)
-    //   arm.angle = Math.sin(this.state.angle) * 1.2
-    //   this.state.angle += 0.05
-    //   lastX = arm.getEndX()
-    //   lastY = arm.getEndY()
-    //   arm.render(this.state.ctx)
-    // })
-
-    //using FKSystem
-    //this.state.ctx.clearRect(0,0,this.state.innerWidth, this.state.innerHeight)
     this.updateRainbow()
-    //this.state.ctx.strokeStyle = this.state.lineColor
-
     this.state.ctx.strokeStyle = `rgba(${this.state.rainbow.r},${this.state.rainbow.g},${this.state.rainbow.b},${this.state.opacity})`
     this.state.ctx.lineWidth = this.state.lineWidth
     this.state.fk.setArmLength(0, this.state.arm1Length)
@@ -332,64 +269,20 @@ export class KinCanvas {
     this.state.fk.rotateArm(2, Math.sin(this.state.angle) * this.state.mod3)
     this.state.angle += this.state.angleChange
     this.state.fk.update()
-    //this.state.fk.render(this.state.ctx)
-
-    
-
-
-    //manually using Arm
-    // //we have 4 arms
-    // this.state.ctx.clearRect(0,0,this.state.innerWidth, this.state.innerHeight)
-    // this.state.arms[0].angle = Math.sin(this.state.angle) * this.state.mod1
-    // this.state.arms[1].angle = Math.cos(this.state.angle ) * this.state.mod2
-    // this.state.arms[2].angle = Math.sin(this.state.angle ) * this.state.mod3
-    // this.state.arms[3].angle = Math.cos(this.state.angle ) * this.state.mod4
-    // this.state.angle += 0.01
-    // this.state.arms[1].x = this.state.arms[0].getEndX()
-    // this.state.arms[1].y = this.state.arms[0].getEndY()
-    // this.state.arms[2].x = this.state.arms[1].getEndX()
-    // this.state.arms[2].y = this.state.arms[1].getEndY()
-    // this.state.arms[3].x = this.state.arms[2].getEndX()
-    // this.state.arms[3].y = this.state.arms[2].getEndY()
-
-    // this.state.arms[0].render(this.state.ctx)
-    // this.state.arms[1].render(this.state.ctx)
-    // this.state.arms[2].render(this.state.ctx)
-    // this.state.arms[3].render(this.state.ctx)
-
-    //follow all arms
-    //let x = this.state.fk.arms
-
     let x = this.state.fk.arms[2].getEndX(), y = this.state.fk.arms[2].getEndY()
     if (this.state.lastPos.x){
       lib.lineTo(this.state.ctx, this.state.lastPos.x, this.state.lastPos.y, x,y )
     }
     this.state.lastPos.x = x
     this.state.lastPos.y = y
-
-
   }
   //////////////////////////
   initData(){
-
     //useing FKSystem
     this.state.fk = FKSystem.create(this.state.innerWidth / 2 ,this.state.innerHeight / 2)
-
     this.state.fk.addArm(this.state.arm1Length)
     this.state.fk.addArm(this.state.arm2Length)
     this.state.fk.addArm(this.state.arm3Length)
-    //manually
-    // let arm = Arm.create(this.state.innerWidth / 2, this.state.innerHeight / 2, 100, 0)
-    // let arm2 = Arm.create(arm.getEndX(), arm.getEndY(), 100, 1.3)
-    // arm2.parent = arm
-    // let arm3 = Arm.create(arm2.getEndX(), arm2.getEndY(), 100, 0)
-    // arm3.parent = arm2
-    // let arm4 = Arm.create(arm3.getEndX(), arm3.getEndY(), 100, 0)
-    // arm4.parent = arm3
-    // this.state.arms.push(arm)
-    // this.state.arms.push(arm2)
-    // this.state.arms.push(arm3)
-    // this.state.arms.push(arm4)
   }
 }
 export default KinCanvas

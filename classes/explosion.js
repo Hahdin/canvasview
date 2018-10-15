@@ -96,7 +96,6 @@ export class Explosion {
     })
   }
   drawExplosion(explosion){
-    //console.log('Boom')
     //explode it into particles, each
     //with an angle and velocity.
     let particles = Math.round(Math.random() * this.state.density)
@@ -125,8 +124,6 @@ export class Explosion {
     }
   } 
   drawParticles(){
-    //this.state.ctx.strokeStyle = 'rgb(255,255,255)'
-    
     this.state.particles.forEach((particle,i)=>{
       //calculate its new position
       this.state.ctx.lineWidth = particle.size
@@ -144,22 +141,6 @@ export class Explosion {
       particle.size = particle.size * .9
       if (y > this.state.innerHeight)
         this.state.particles.splice(i, 1)
-
-      /**
-       * one way
-       */
-      //add gravity to vertical velocity
-      // particle.velocity.yvel += ((0.1 * particle.time) * (0.1 * particle.time++))
-
-      // //new y pos
-      // let y = particle.lastPos.y + particle.velocity.yvel
-      // let x = particle.lastPos.x + particle.velocity.xvel//constant for now
-      // lib.lineTo(this.state.ctx, particle.lastPos.x, particle.lastPos.y, x, y)
-      // particle.lastPos.x = x
-      // particle.lastPos.y = y
-
-      // if (y > this.state.innerHeight)
-      //   this.state.particles.splice(i, 1)
     })
   }
 }

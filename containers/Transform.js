@@ -9,7 +9,6 @@ class Transform extends Component {
   }
 
   componentDidMount() {
-    //_myLogCanvas.initLog(this.state.curves)
     let _t = new transforms()
     _t.initCanvas()
     _t._fill('rgba(0,0,0, 1)', 0, 0)

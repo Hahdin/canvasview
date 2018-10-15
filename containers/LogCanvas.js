@@ -1,8 +1,5 @@
 import React, { Component } from 'react'
-//import logCanvas from '../classes/logCanvas'
 import Explosion from '../classes/explosion'
-//let _myLogCanvas = new logCanvas()
-//let myExplosion = new Explosion()
 class LogCanvas extends Component {
   constructor(props) {
     super(props)

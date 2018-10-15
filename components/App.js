@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import MyHeader from '../containers/MyHeader'
 import MathCanvas from '../containers/MathCanvas'
 import LogCanvas from '../containers/LogCanvas'
 import Kinematics from '../containers/Kinematics'
@@ -20,7 +19,7 @@ class App extends Component {
   render() {
     const { path } = this.props.match;
     return (
-      <div className='container '>
+      <div className='container-fluid'>
         <div className="col-md-12">
           <Router history={history}>
             <div>

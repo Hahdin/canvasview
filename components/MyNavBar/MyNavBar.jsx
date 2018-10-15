@@ -9,10 +9,10 @@ import {
 import { LinkContainer } from "react-router-bootstrap";
 export const MyNavBar = ({ ...props }) => {
   return (
-    <Navbar inverse fluid collapseOnSelect style={{boxShadow: '2px 2px 10px black'}}>
+    <Navbar inverse fluid collapseOnSelect style={{boxShadow: '2px 2px 10px black', width: '80%'}}>
       <Navbar.Header>
         <Navbar.Brand>
-          <a href="/">Canvas Home</a>
+          <a href="/">Canvas Home </a>
         </Navbar.Brand>
         <Navbar.Toggle />
       </Navbar.Header>

@@ -1,8 +1,5 @@
 import React, { Component } from 'react'
-//import myCanvas from '../classes/myCanvas'
 import Volcano from '../classes/volcano'
-
-
 class MathCanvas extends Component {
   constructor(props) {
     super(props)
@@ -23,7 +20,6 @@ class MathCanvas extends Component {
     this.state.volcano.cleanup()
     this.state.volcano.stop()
   }
-
   render() {
     return (<div />)
   }

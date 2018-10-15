@@ -1,6 +1,5 @@
 const dat = require('dat.gui');
 import lib from './lib'
-//import Flock from './boid'
 export class Connect {
   constructor(props) {
     this.state = {
@@ -8,7 +7,7 @@ export class Connect {
       innerHeight: 0,
       ctx: null,
       canvas: null,
-      gui: null,//new dat.GUI({ width: 310 }),
+      gui: null,
       drawTimer: null,
       fadeTimer: null,
       //specific stuff
@@ -184,8 +183,6 @@ class Boid {
     //this.color = `rgb(${~~(Math.random() * 255)},${~~(Math.random() * 255)}, ${255} )`
     this.radius = ~~(Math.random() * 3)
     this.mass = this.radius
-
-
   }
   //  Heading is represented by a decimal value indicating the radians
   getheading() {
@@ -266,14 +263,12 @@ class Boid {
     let separationForce = { x: 0, y: 0 }
     //return separationForce
     neighbors.forEach(neighbor => {
-      //Distance = sqrt((x1 - x2)^2 + (y1 - y2)^2)
       let distance = Math.abs(Math.sqrt(((this.position.x - neighbor.position.x) ** 2) + ((this.position.y - neighbor.position.y) ** 2)))
       if (distance < this.separationDistance && distance > 0) {
         let offset = {
           x: this.position.x - neighbor.position.x,
           y: this.position.y - neighbor.position.y,
         }
-        //sqrt(this.x*this.x + this.y*this.y);
         let mag = Math.abs(Math.sqrt((this.position.x ** 2) + (this.position.y ** 2)))
         let normalized = {
           x: offset.x / mag,
@@ -282,7 +277,6 @@ class Boid {
         let force = { x: normalized.x /= distance, y: normalized.y /= distance };
         separationForce.x += force.x
         separationForce.y += force.y
-        //console.log('sep force', separationForce)
       }
     })
     let _force = {
@@ -318,17 +312,12 @@ class Boid {
     //random event
     if (Math.random() > .999){
       this.velocity.x *= 2
-      //this.acceleration.x *= -1
     }
     if (Math.random() > .999){
       this.velocity.y *= 2
-      //this.acceleration.y *= -1
     }
-
-
     //  Acceleration is reset each frame
     this.acceleration = { x: 0, y: 0 };
-    // this.color = `rgb(${~~(Math.random() * 255)},${~~(Math.random() * 255)}, ${~~(Math.random() * 255)} )`
   }
 }
 class Flock {
@@ -344,23 +333,16 @@ class Flock {
 
   populateFlock(defaults) {
     for (var n = 0; n < this.size; n++) {
-
       //  The boids will be created at the center of the graph.
       this.boids.push(new Boid(this.center.x, this.center.y, this.area, defaults));
-
       //  The angle of the boids are evenly distributed in a circle
       var angle = (n / this.size) * 2 * Math.PI;
-
       //  The velocity is set based on the calculated angle
       this.boids[n].velocity = { x: Math.cos(angle), y: Math.sin(angle) };
     }
   }
 
   updateFlock() {
-    // for(var i = 0; i < this.size; i++){
-    //     this.boids[i].update();
-    // }
-
     let neighbors = []
     this.boids.forEach((boid, i) => {
       //find this boid's neighbors
@@ -375,5 +357,4 @@ class Flock {
     })
   }
 }
-
 export default Connect

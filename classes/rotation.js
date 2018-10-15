@@ -120,7 +120,6 @@ export class Rotation {
 
     }, 60)
   }
-  //////////////////////////
   initData() {
     //initialize the rotation matrices with the angle of rotation
     this.state.xRot = {
@@ -169,11 +168,9 @@ export class Rotation {
         x: -size + (Math.random() * (size*2)), 
         y: -size + (Math.random() * (size*2)), 
         z: z, 
-        //clr: lib.get_hsla(),
         clr: `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255},${Math.random()} )`
       })
     }
-
   }
   getComb(point, rotation) {
     let rotate = this.state[`${rotation}`]
@@ -203,7 +200,6 @@ export class Rotation {
     this.rotate(this.state.xAxis)
     this.rotate(this.state.yAxis)
     this.rotate(this.state.zAxis)
-
     this.state.ctx.fillStyle = this.state.ctx.strokeStyle = 'red'
     lib.lineTo(this.state.ctx, 0, 0, this.state.xAxis.x, this.state.xAxis.y)
     lib.drawSphere(this.state.ctx, {x:this.state.xAxis.x, y:this.state.xAxis.y}, 5)
@@ -221,7 +217,6 @@ export class Rotation {
   }
 
   drawRandom(){
-    
     this.rotateArray(this.state.random_array)
     this.state.ctx.lineWidth = this.state.rand_line
     this.state.random_array.forEach(point =>{

@@ -9,7 +9,6 @@ class Rotate extends Component {
   }
 
   componentDidMount() {
-    //_myLogCanvas.initLog(this.state.curves)
     let rot = new Rotation()
     rot.initCanvas()
     rot._fill('rgba(0,0,0, 1)', 0, 0)

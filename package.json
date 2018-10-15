@@ -5,12 +5,11 @@
   "private": true,
   "scripts": {
     "heroku-postbuild": "webpack -p",
-    "start_dev": "babel-node --presets @babel/preset-env server.js",
+    "serve_dev": "babel-node --presets @babel/preset-env server.js",
     "dev": "webpack-dev-server --open",
     "clean": "rm -rf build && mkdir build",
     "build-babel": "babel -d ./build --presets @babel/preset-env server.js",
     "build": "npm run clean && npm run build-babel",
-    "start_test": "npm run build && node ./build/server.js",
     "start": "npm run build && node ./build/server.js"
   },
   "author": "",
@@ -37,7 +36,9 @@
     "css-loader": "^0.28.11",
     "html-webpack-plugin": "^3.2.0",
     "path": "^0.12.7",
-    "style-loader": "^0.21.0",
+    "style-loader": "^0.21.0"
+  },
+  "devDependencies": {
     "webpack-dev-server": "^3.1.9"
   }
 }

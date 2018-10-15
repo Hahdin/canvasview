@@ -28,7 +28,6 @@ export class GOL {
     this.state.innerWidth = this.state.canvas.innerWidth = this.state.canvas.width = window.innerWidth * 0.9
     this.state.ctx = this.state.canvas.getContext("2d")
     this.state.gui = new dat.GUI({ width: 310 })
-    this.addGui()
     this._fill('rgba(255,255,255, 1)', 0, 0)
     this.initData()
   }
@@ -129,14 +128,6 @@ export class GOL {
       }
     }
   }
-  addGui() {
-    let controller = {
-    }
-    // this.state.gui.add(controller, 'gravity', 0.1, 1).step(0.01).name('Gravity').onChange((value) => {
-    //   if (this.state.gravity === value) return
-    //   this.state.gravity = value
-    // })
-  }
   _fill(color, x, y) {
     lib._fill(this.state.ctx, color, x, y, this.state.innerWidth, this.state.innerHeight)
   }
@@ -151,8 +142,6 @@ export class GOL {
     this.state.drawTimer = setInterval(() => {
       this.draw()
     }, 500)
-    //this.state.fadeTimer = setInterval(this.fade.bind(this), 200)
   }
-  //////////////////////////
 }
 export default GOL

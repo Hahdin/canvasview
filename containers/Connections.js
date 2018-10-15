@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-//import logCanvas from '../classes/logCanvas'
 import Connect from '../classes/connect'
 class Connections extends Component {
   constructor(props) {

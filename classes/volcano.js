@@ -14,7 +14,7 @@ export class Volcano {
       },
       projectileSize: 200,
       fireWorks: [],
-      gui: null,//new dat.GUI({ width: 310 }),
+      gui: null,
       gravity: 0.0035,
       initialVelocity: 5,
       trackMouse: false,
@@ -32,11 +32,9 @@ export class Volcano {
     this.mouseLeave = this.mouseLeave.bind(this)
   }
   initCanvas() {
-
     this.state.canvas = document.getElementById("canvas")
     this.state.innerHeight = this.state.canvas.innerHeight = this.state.canvas.height = window.innerHeight * 0.9
     this.state.innerWidth = this.state.canvas.innerWidth = this.state.canvas.width = window.innerWidth * 0.9
-    //console.log('hey', this.state.canvas)
     this.state.ctx = this.state.canvas.getContext("2d")
     canvas.addEventListener('mousemove', this.trackMouse, false);
     canvas.addEventListener('mousedown', this.trackMouseButton, false);
@@ -44,7 +42,6 @@ export class Volcano {
     canvas.addEventListener('mouseleave', this.mouseLeave, false);
     this.state.gui = new dat.GUI({ width: 310 })
     this.addGui()
-
   }
   cleanup(){
     this.state.gui.destroy()
@@ -123,7 +120,6 @@ export class Volcano {
     this.projectile.bind(this)
     this.explodeFireworks.bind(this)
     this.drawParticles.bind(this)
-
     this.state.drawTimer = setInterval(() =>{
       this.projectile()
       this.explodeFireworks()
@@ -138,12 +134,10 @@ export class Volcano {
 
   bounce(projectile) {
     if (projectile.yPos > this.state.innerHeight - 5) {
-      //console.log('b4', projectile.verticalVelocity)
       projectile.verticalVelocity = (- projectile.verticalVelocity * this.state.bounceVelRatio)
       projectile.angle = 40 + Math.random() * 100
       projectile.horizontalVelocity = Math.cos(projectile.angle * Math.PI / 180) * projectile.verticalVelocity
       projectile.time = 0
-      //console.log('after', projectile.verticalVelocity)
     }
   }
   createProjectile() {
@@ -162,12 +156,10 @@ export class Volcano {
       time: 0,
       lineWidth: (Math.random() > 0.8) ? Math.random() * 10 : Math.random() * 2,
       color: `rgba(${255},${Math.random() * 50},${Math.random() * 50},${Math.random()})`,
-      //color: `rgba(${Math.random() *255},${Math.random() *255},${Math.random() *255},${Math.random()})`,
       shadowColor: `rgba(${255},${255},${Math.random() * 255},${1})`,
     }
     projectile.verticalVelocity = (projectile.lineWidth < 2) ? Math.random() * this.state.initialVelocity : Math.random() * (this.state.initialVelocity + 10)
     projectile.horizontalVelocity = Math.cos(projectile.angle * Math.PI / 180) * projectile.verticalVelocity
-
     if (Math.random() * 100 > 99.5) {
       projectile.lineWidth = 20
       projectile.verticalVelocity = Math.random() * this.state.initialVelocity + 15
@@ -177,30 +169,24 @@ export class Volcano {
     return projectile
   }
   createFirework(projectile, i) {
-
     let { xPos, yPos } = projectile
     this.state.projectiles.splice(i, 1)//remove it
-
     let fw = {
       center: {
         x: xPos,
         y: yPos
       },
-      //color: `rgba(${255},${Math.random() * 250},${Math.random() * 250},${Math.random()})`,
       r: Math.random() * 255,
       g: Math.random() * 255,
       b: Math.random() * 255,
       a: 1,
       maxRadius: 50 + Math.random() * 100,
       lastRadius: 0,
-      //currentRadius: 0,
       vel: 10 + Math.random() * 20,
       lineWidth: projectile.lineWidth,
       rotation: 0
     }
     this.state.fireWorks.push(fw)
-
-
   }
   explodeFireworks() {
     this.state.fireWorks.forEach((firework, i) => {
@@ -213,13 +199,6 @@ export class Volcano {
     //explode in a circuar pattern, add particles
     if (this.state.particles.length > 1500)
       return
-    // let color = {
-    //   r: 100 + Math.random() *155,
-    //   g: 100 + Math.random() *155,
-    //   b: 100 + Math.random() *155,
-    //   a: 1
-    // }
-
     let color = this.getFireworkColor()
     let count = 100 + Math.round(Math.random() * 200)
     let angle = (Math.PI * 2) / count
@@ -334,7 +313,6 @@ export class Volcano {
       let x = pt.x + (pt.vx * xComp)
       let g = (((this.state.gravity * 12) * pt.time) * ((this.state.gravity * 12) * pt.time++))
       let y = pt.y + ((pt.vy) * yComp) + g
-      //console.log(pt.time)
       if (Math.random() > 0.5)
         lib.lineTo(this.state.ctx, pt.x, pt.y, x, y)
       else{
@@ -342,7 +320,6 @@ export class Volcano {
          let line = pt.line
         if (extra > 0.95){
           this.state.ctx.fillStyle = 'rgba(255,255,255,1)'
-          //line *= 2
         }
         this.drawSparkle({x: x, y: y}, line)
       }
@@ -350,7 +327,6 @@ export class Volcano {
       pt.y = y
       pt.line = pt.line * .96
       if (y > this.state.innerHeight){
-        //console.log('remove', pt.time)
         this.state.particles.splice(i, 1)
       }
     })
@@ -378,8 +354,6 @@ export class Volcano {
       this.state.ctx.shadowBlur = 20.01
       this.state.ctx.shadowColor = projectile.shadowColor
       let gravity = this.state.gravity
-      //let gravity = projectile.verticalVelocity > 10 ? this.state.gravity : this.state.gravity / 2
-      let tsin = Math.sin(projectile.angle * Math.PI / 180)
       let grav = ((gravity * projectile.time++) * (gravity * projectile.time++))
       let vertVelY = projectile.verticalVelocity *
         Math.sin(projectile.angle * Math.PI / 180) //- ((gravity * projectile.time++) * (gravity * projectile.time++))

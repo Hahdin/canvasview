@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-//import logCanvas from '../classes/logCanvas'
 import forrest from '../classes/forrest'
 class TheForrest extends Component {
   constructor(props) {
@@ -10,7 +9,6 @@ class TheForrest extends Component {
   }
 
   componentDidMount() {
-    //_myLogCanvas.initLog(this.state.curves)
     let myForrest = new forrest()
     myForrest.initCanvas()
     myForrest._fill('rgba(0,0,0, 1)', 0, 0)

@@ -9,7 +9,6 @@ class Kinematics extends Component {
   }
 
   componentDidMount() {
-    //_myLogCanvas.initLog(this.state.curves)
     let _kinCanvas = new KinCanvas()
     _kinCanvas.initCanvas()
     _kinCanvas._fill('rgba(0,0,0, 1)', 0, 0)

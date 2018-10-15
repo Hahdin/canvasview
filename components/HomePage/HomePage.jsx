@@ -75,12 +75,6 @@ export class HomePage extends React.Component {
             Play around and have fun.</p>
 
 
-            <h2>Some technical aspects.</h2>
-            <p>Some may wonder why so may "dev" modules are included in the dependancies.
-            This is a result of the method of deploying this app to [heroku.com](https://canvasview.herokuapp.com/).
-            Since it requires the 'npm start' to fire it all up, some packages that normally would not be
-            inculded in the dependencies for deployment (babel, webpack) are by necessity included.
-            This deployment is by no means to be considered an appropriate produciton build, it is definitely 'dev' still.</p>
           </div>
         </div>
       </div>

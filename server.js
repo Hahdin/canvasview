@@ -1,6 +1,6 @@
 import express from 'express'
 const path = require('path')
-const port = 80
+const port = process.ENV.PORT || 80
 const app = express()
 app.use(express.static('dist'))
 app.get('/*', function (req, res) {

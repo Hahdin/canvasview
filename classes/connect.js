@@ -12,56 +12,56 @@ export class Connect {
       fadeTimer: null,
       //specific stuff
       flock: null,
-      separationDistance : 50,
-      separationStrength : 100,
-      cohesionDistance : 60,
-      cohesionStrength :.001,
-      alignmentDistance : 100,
-      alignmentStrength : .01,
+      separationDistance: 50,
+      separationStrength: 100,
+      cohesionDistance: 60,
+      cohesionStrength: .001,
+      alignmentDistance: 100,
+      alignmentStrength: .01,
       maxVelocity: 1,
-      whoIsNeighbor: 70,
+      whoIsNeighbor: 100,
       numberOf: 100,
-      consideration: 0.2,
-  
+      consideration: 0.6,
+      finLength: 10,
+      sizeMax: 3,
+      fadeTime: 120,
+      showConnections: false,
     }
-     this.cleanup = this.cleanup.bind(this)
+    this.cleanup = this.cleanup.bind(this)
   }
-  cleanup(){
+  cleanup() {
     this.state.gui.destroy()
   }
   initCanvas() {
-
     this.state.canvas = document.getElementById("canvas")
     this.state.innerHeight = this.state.canvas.innerHeight = this.state.canvas.height = window.innerHeight * 0.9
     this.state.innerWidth = this.state.canvas.innerWidth = this.state.canvas.width = window.innerWidth * 0.9
     this.state.ctx = this.state.canvas.getContext("2d")
     this.state.gui = new dat.GUI({ width: 400 })
-    canvas.addEventListener('mousedown', this.mousedown.bind(this), false);
     this.initData()
     this.addGui()
-
-  }
-  mousedown(e){
-
   }
   //////////////////////////
-  initData(){
+  initData() {
     //create some random points in space
     if (this.state.flock)
       this.state.flock = null
     let defaults = {
-      separationDistance : this.state.separationDistance,
-      separationStrength : this.state.separationStrength,
-      cohesionDistance : this.state.cohesionDistance,
-      cohesionStrength :this.state.cohesionStrength,
-      alignmentDistance : this.state.alignmentDistance,
-      alignmentStrength : this.state.alignmentStrength,
+      separationDistance: this.state.separationDistance,
+      separationStrength: this.state.separationStrength,
+      cohesionDistance: this.state.cohesionDistance,
+      cohesionStrength: this.state.cohesionStrength,
+      alignmentDistance: this.state.alignmentDistance,
+      alignmentStrength: this.state.alignmentStrength,
       maxVelocity: this.state.maxVelocity,
       whoIsNeighbor: this.state.whoIsNeighbor,
       consideration: this.state.consideration,
+      sizeMax: this.state.sizeMax,
+      ctx: this.state.ctx,
+      showConnections: this.state.showConnections,
     }
-    this.state.flock = new Flock(this.state.numberOf, {x: this.state.canvas.innerWidth / 2, y:this.state.canvas.innerHeight / 2 }, defaults)
-  
+    this.state.flock = new Flock(this.state.numberOf, { x: this.state.canvas.innerWidth / 2, y: this.state.canvas.innerHeight / 2 }, defaults)
+
   }
   addGui() {
     if (!this.state.flock)
@@ -82,8 +82,12 @@ export class Connect {
       maxVelocity: this.state.maxVelocity,
       numberOf: this.state.numberOf,
       consideration: this.state.consideration,
+      finLength: this.state.finLength,
+      sizeMax: this.state.sizeMax,
+      fadeTime: this.state.fadeTime,
+      showConnections: this.state.showConnections,
     }
-    this.state.gui.add(controller, 'whoIsNeighbor', 1, 100).step(1).name('Neighbor distance').onChange((value) => {
+    this.state.gui.add(controller, 'whoIsNeighbor', 1, 500).step(1).name('Neighbor distance').onChange((value) => {
       if (this.state.whoIsNeighbor === value) return
       this.state.whoIsNeighbor = value
       this.state.flock.neighborDistance = value
@@ -135,36 +139,68 @@ export class Connect {
       this.state.consideration = value
       this.initData()
     })
+    this.state.gui.add(controller, 'finLength', 0, 20).step(1).name('Fin Length').onChange((value) => {
+      if (this.state.finLength === value) return
+      this.state.finLength = value
+    })
+    this.state.gui.add(controller, 'sizeMax', 2, 20).step(1).name('Max. Size').onChange((value) => {
+      if (this.state.sizeMax === value) return
+      this.state.sizeMax = value
+      this.initData()
+    })
+    this.state.gui.add(controller, 'fadeTime', 60, 240).step(1).name('Fade time (ms)').onChange((value) => {
+      if (this.state.fadeTime === value) return
+      this.state.fadeTime = value
+      clearInterval(this.state.fadeTimer)
+      this.state.fadeTimer = setInterval(this.fade.bind(this), this.state.fadeTime)
+    })
+    this.state.gui.add(controller, 'showConnections', 0, 1).name('Show Connections').onChange((value) => {
+      if (this.state.showConnections === value) return
+      this.state.showConnections = value
+      this.initData()
+    })
   }
   _fill(color, x, y) {
     lib._fill(this.state.ctx, color, x, y, this.state.innerWidth, this.state.innerHeight)
   }
   fade() {
-    lib.cvFade(this.state.ctx,'rgba(0,0,0, 0.1)',this.state.innerWidth, this.state.innerHeight)
+    lib.cvFade(this.state.ctx, 'rgba(0,0,0, 0.1)', this.state.innerWidth, this.state.innerHeight)
   }
-  stop(){
+  stop() {
     clearInterval(this.state.fadeTimer)
     clearInterval(this.state.drawTimer)
   }
   start() {
-    this.state.drawTimer = setInterval(() =>{
+    this.state.drawTimer = setInterval(() => {
       this.draw()
     }, 60)
-    this.state.fadeTimer = setInterval(this.fade.bind(this), 60)
+    this.state.fadeTimer = setInterval(this.fade.bind(this), this.state.fadeTime)
   }
-  draw(){
+  draw() {
     this.state.flock.updateFlock()
-    
-    this.state.flock.boids.forEach(boid =>{
+    let wing = 0.87
+    //modify fin length by radius
+    this.state.flock.boids.forEach(boid => {
+      let fin = this.state.finLength * (boid.radius / 2)
+      //fin = fin >= 10 ? fin : 10
       this.state.ctx.fillStyle = boid.color
-      lib.drawSphere(this.state.ctx, {x:boid.position.x, y:boid.position.y}, boid.radius)
+      this.state.ctx.strokeStyle = boid.color
+      lib.drawSphere(this.state.ctx, { x: boid.position.x, y: boid.position.y }, boid.radius)
+      let heading = boid.getheading()
+      let lineX = fin * Math.cos(heading - wing)
+      let lineY = fin * Math.sin(heading - wing)
+      lib.lineTo(this.state.ctx, boid.position.x, boid.position.y, boid.position.x + lineX, boid.position.y + lineY)
+      lineX = -fin * Math.cos(heading + wing)
+      lineY = -fin * Math.sin(heading + wing)
+      let linesize = boid.radius / 4
+      this.state.ctx.lineWidth = linesize > 0.7 ? 0.7 : linesize
+      lib.lineTo(this.state.ctx, boid.position.x, boid.position.y, boid.position.x + lineX, boid.position.y + lineY)
     })
   }
 }
 
 class Boid {
   constructor(x, y, area, defaults) {
-    //this.position = { x: x, y: y }
     this.position = { x: Math.round(Math.random() * area.x), y: Math.round(Math.random() * area.y) }
     this.velocity = { x: 0, y: 0 }
     this.acceleration = { x: 0, y: 0 }
@@ -177,11 +213,12 @@ class Boid {
     this.alignmentStrength = defaults.alignmentStrength;
     this.maxVelocity = defaults.maxVelocity
     this.consideration = defaults.consideration
+    this.ctx = defaults.ctx
     this.color = `rgb(${~~(Math.random() * 255)},${~~(Math.random() * 255)}, ${~~(Math.random() * 255)} )`
     //this.color = `rgb(${255},${~~(Math.random() * 255)}, ${~~(Math.random() * 255)} )`
     //this.color = `rgb(${~~(Math.random() * 255)},${255}, ${~~(Math.random() * 255)} )`
     //this.color = `rgb(${~~(Math.random() * 255)},${~~(Math.random() * 255)}, ${255} )`
-    this.radius = ~~(Math.random() * 3)
+    this.radius = ~~(Math.random() * defaults.sizeMax)
     this.mass = this.radius
   }
   //  Heading is represented by a decimal value indicating the radians
@@ -192,20 +229,24 @@ class Boid {
   //  This function will be called to guide the boid while flocking
   applyForce(force) {
     //  Acceleration is force devided by mass
-    this.acceleration.x += force.x / this.mass;
-    this.acceleration.y += force.y / this.mass;
+    this.acceleration.x += force.x / (this.mass / 2);
+    this.acceleration.y += force.y / (this.mass / 2);
   }
 
   update(neighbors) {
     let separationForce = this.calculateSeparation(neighbors);
     let cohesionForce = this.calculateCohesion(neighbors);
     let alignmentForce = this.calculateAlignment(neighbors);
-    if (Math.random() < this.consideration){
+    if (Math.random() < this.consideration) {
       this.applyForce(separationForce);
       this.applyForce(cohesionForce);
       this.applyForce(alignmentForce);
     }
     this.updatePosition()
+    if (neighbors.length <= 0){
+      this.velocity.x += ( -(this.maxVelocity / 2) + Math.random()* this.maxVelocity)
+      this.velocity.y += ( -(this.maxVelocity / 2) + Math.random() * this.maxVelocity) 
+    }
   }
   calculateAlignment(neighbors) {
     let averageVelocity = { x: 0, y: 0 };
@@ -213,8 +254,8 @@ class Boid {
     neighbors.forEach(neighbor => {
       let distance = Math.abs(Math.sqrt(((this.position.x - neighbor.position.x) ** 2) + ((this.position.y - neighbor.position.y) ** 2)))
       if (distance < this.alignmentDistance) {
-        averageVelocity.x += neighbor.velocity.x;
-        averageVelocity.y += neighbor.velocity.y;
+        averageVelocity.x += (neighbor.velocity.x * neighbor.mass);
+        averageVelocity.y += (neighbor.velocity.y * neighbor.mass);
         count++;
       }
     })
@@ -223,7 +264,7 @@ class Boid {
       averageVelocity.y /= count;
     }
     let alignmentForce = {
-      x: averageVelocity.x * this.  alignmentStrength,
+      x: averageVelocity.x * this.alignmentStrength,
       y: averageVelocity.y * this.alignmentStrength
     };
     return alignmentForce
@@ -255,13 +296,9 @@ class Boid {
       return cohesionForce
     }
     return { x: 0, y: 0 }
-
-
-
   }
   calculateSeparation(neighbors) {
     let separationForce = { x: 0, y: 0 }
-    //return separationForce
     neighbors.forEach(neighbor => {
       let distance = Math.abs(Math.sqrt(((this.position.x - neighbor.position.x) ** 2) + ((this.position.y - neighbor.position.y) ** 2)))
       if (distance < this.separationDistance && distance > 0) {
@@ -296,27 +333,18 @@ class Boid {
     //  Veloity is change in position
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;
-    if (this.position.x < 0){
+    if (this.position.x < 0) {
       this.position.x = this.area.x
     }
-    if (this.position.y < 0){
+    if (this.position.y < 0) {
       this.position.y = this.area.y
     }
-    if (this.position.x > this.area.x){
+    if (this.position.x > this.area.x) {
       this.position.x = 0
     }
-    if (this.position.y > this.area.y){
+    if (this.position.y > this.area.y) {
       this.position.y = 0
     }
-
-    //random event
-    if (Math.random() > .999){
-      this.velocity.x *= 2
-    }
-    if (Math.random() > .999){
-      this.velocity.y *= 2
-    }
-    //  Acceleration is reset each frame
     this.acceleration = { x: 0, y: 0 };
   }
 }
@@ -328,6 +356,8 @@ class Flock {
     this.size = flockSize;
     this.center = center
     this.area = { x: center.x * 2, y: center.y * 2 }
+    this.ctx = defaults.ctx
+    this.showConnections = defaults.showConnections
     this.populateFlock(defaults);
   }
 
@@ -345,6 +375,9 @@ class Flock {
   updateFlock() {
     let neighbors = []
     this.boids.forEach((boid, i) => {
+      if (isNaN(boid.position.x) || isNaN(boid.position.y)) {
+        return
+      }
       //find this boid's neighbors
       this.boids.forEach((nboid, j) => {
         if (j !== i) {
@@ -353,7 +386,15 @@ class Flock {
           sqDist < this.neighborDistanceSquared ? neighbors.push(nboid) : null
         }
       })
-      boid.update(neighbors);
+      boid.update([...neighbors]);
+      if (this.showConnections) {
+        this.ctx.lineWidth = 0.1
+        this.ctx.strokeStyle = boid.color
+        neighbors.forEach(n => {
+          lib.lineTo(this.ctx, boid.position.x, boid.position.y, n.position.x, n.position.y)
+        })
+      }
+      neighbors = []
     })
   }
 }

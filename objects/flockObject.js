@@ -141,7 +141,24 @@ export const flockObject = {
       ctx: this.ctx,
       showConnections: this.showConnections,
     }
-    this.flock = new Flock(this.numberOf, { x: (window.innerWidth * 0.9) / 2, y: (window.innerHeight * 0.9) / 2 }, defaults)
+    let _flock = this.flockFactory( defaults)
+    _flock.populateFlock()
+    this.flock = _flock
+  },
+  flockFactory(defaults) {
+    return Object.assign(Object.create(_Flock), {
+      flockSize: this.numberOf,
+      center:{
+        x: (window.innerWidth * 0.9) / 2,
+        y: (window.innerHeight * 0.9) / 2
+      },
+      defaults,
+      boids: [],
+      ctx: defaults.ctx,
+      showConnections: defaults.showConnections,
+      neighborDistance: this.whoIsNeighbor,
+      neighborDistanceSquared: this.whoIsNeighbor ** 2,
+    })
   },
   initCanvas() {
     this.canvas = document.getElementById("canvas")
@@ -190,41 +207,35 @@ export const flockObject = {
     lib.cvFade(this.ctx, 'rgba(0,0,0, 0.1)', this.innerWidth, this.innerHeight)
   },
 }
-
-class Boid {
-  constructor(x, y, area, defaults) {
-    this.position = { x: Math.round(Math.random() * area.x), y: Math.round(Math.random() * area.y) }
-    this.velocity = { x: 0, y: 0 }
-    this.acceleration = { x: 0, y: 0 }
-    this.area = area
-    this.separationDistance = defaults.separationDistance;
-    this.separationStrength = defaults.separationStrength;
-    this.cohesionDistance = defaults.cohesionDistance;
-    this.cohesionStrength = defaults.cohesionStrength;
-    this.alignmentDistance = defaults.alignmentDistance;
-    this.alignmentStrength = defaults.alignmentStrength;
-    this.maxVelocity = defaults.maxVelocity
-    this.consideration = defaults.consideration
-    this.ctx = defaults.ctx
-    this.color = `rgb(${~~(Math.random() * 255)},${~~(Math.random() * 255)}, ${~~(Math.random() * 255)} )`
-    //this.color = `rgb(${255},${~~(Math.random() * 255)}, ${~~(Math.random() * 255)} )`
-    //this.color = `rgb(${~~(Math.random() * 255)},${255}, ${~~(Math.random() * 255)} )`
-    //this.color = `rgb(${~~(Math.random() * 255)},${~~(Math.random() * 255)}, ${255} )`
-    this.radius = ~~(Math.random() * defaults.sizeMax)
-    this.mass = this.radius
-  }
-  //  Heading is represented by a decimal value indicating the radians
+const _Boid = {
+  area: {
+    x:0,
+    y:0,
+  },
+  position : { x: 0, y: 0 },
+  velocity : { x: 0, y: 0 },
+  acceleration : { x: 0, y: 0 },
+  separationDistance : 0,
+  separationStrength : 0,
+  cohesionDistance : 0,
+  cohesionStrength : 0,
+  alignmentDistance : 0,
+  alignmentStrength : 0,
+  maxVelocity : 0,
+  consideration : 0,
+  ctx : null,
+  color : '',
+  radius : 0,
+  mass : 0,
   getheading() {
     return Math.atan2(this.velocity.x, this.velocity.y);
-  }
-
+  },
   //  This function will be called to guide the boid while flocking
   applyForce(force) {
     //  Acceleration is force devided by mass
     this.acceleration.x += force.x / (this.mass / 2);
     this.acceleration.y += force.y / (this.mass / 2);
-  }
-
+  },
   update(neighbors) {
     let separationForce = this.calculateSeparation(neighbors);
     let cohesionForce = this.calculateCohesion(neighbors);
@@ -239,7 +250,7 @@ class Boid {
       this.velocity.x += ( -(this.maxVelocity / 2) + Math.random()* this.maxVelocity)
       this.velocity.y += ( -(this.maxVelocity / 2) + Math.random() * this.maxVelocity) 
     }
-  }
+  },
   calculateAlignment(neighbors) {
     let averageVelocity = { x: 0, y: 0 };
     let count = 0;
@@ -260,7 +271,7 @@ class Boid {
       y: averageVelocity.y * this.alignmentStrength
     };
     return alignmentForce
-  }
+  },
   calculateCohesion(neighbors) {
     let averagePosition = { x: 0, y: 0 };
     let count = 0
@@ -288,7 +299,7 @@ class Boid {
       return cohesionForce
     }
     return { x: 0, y: 0 }
-  }
+  },
   calculateSeparation(neighbors) {
     let separationForce = { x: 0, y: 0 }
     neighbors.forEach(neighbor => {
@@ -313,7 +324,7 @@ class Boid {
       y: separationForce.y * this.separationStrength,
     }
     return _force
-  }
+  },
   updatePosition() {
     //  Acceleration is change in velocity
     this.velocity.x += this.acceleration.x;
@@ -338,32 +349,31 @@ class Boid {
       this.position.y = 0
     }
     this.acceleration = { x: 0, y: 0 };
-  }
+  },
 }
-class Flock {
-  constructor(flockSize, center, defaults) {
-    this.boids = [];
-    this.neighborDistance = defaults.whoIsNeighbor;
-    this.neighborDistanceSquared = Math.pow(this.neighborDistance, 2);
-    this.size = flockSize;
-    this.center = center
-    this.area = { x: center.x * 2, y: center.y * 2 }
-    this.ctx = defaults.ctx
-    this.showConnections = defaults.showConnections
-    this.populateFlock(defaults);
-  }
-
-  populateFlock(defaults) {
-    for (var n = 0; n < this.size; n++) {
+const _Flock ={
+  flockSize: 1,
+  center: {
+    x:0,
+    y:0,
+  },
+  defaults: null,
+  boids: [],
+  neighborDistance : 0,
+  neighborDistanceSquared : 0,
+  ctx: null,
+  showConnections: false,
+  populateFlock() {
+    for (var n = 0; n < this.flockSize; n++) {
       //  The boids will be created at the center of the graph.
-      this.boids.push(new Boid(this.center.x, this.center.y, this.area, defaults));
+      let newBoid = this.boidFactory({ })
       //  The angle of the boids are evenly distributed in a circle
-      var angle = (n / this.size) * 2 * Math.PI;
+      let angle = (n / this.flockSize) * 2 * Math.PI;
       //  The velocity is set based on the calculated angle
-      this.boids[n].velocity = { x: Math.cos(angle), y: Math.sin(angle) };
+      newBoid.velocity = { x: Math.cos(angle), y: Math.sin(angle) };
+      this.boids.push(newBoid)
     }
-  }
-
+  },
   updateFlock() {
     let neighbors = []
     this.boids.forEach((boid, i) => {
@@ -387,6 +397,32 @@ class Flock {
         })
       }
       neighbors = []
+    })
+  },
+  boidFactory  () {
+    let rad = (Math.random() * this.defaults.sizeMax)
+    return Object.assign(Object.create(_Boid), {
+      x: this.center.x,
+      y: this.center.y,
+      area: {
+        x:this.center.x * 2,
+        y:this.center.y * 2,
+      },
+      position : { x: Math.round(Math.random() * this.center.x * 2), y: Math.round(Math.random() * this.center.y * 2) },
+      velocity : { x: 0, y: 0 },
+      acceleration : { x: 0, y: 0 },
+      separationDistance : this.defaults.separationDistance,
+      separationStrength : this.defaults.separationStrength,
+      cohesionDistance : this.defaults.cohesionDistance,
+      cohesionStrength : this.defaults.cohesionStrength,
+      alignmentDistance : this.defaults.alignmentDistance,
+      alignmentStrength : this.defaults.alignmentStrength,
+      maxVelocity : this.defaults.maxVelocity,
+      consideration : this.defaults.consideration,
+      ctx : this.defaults.ctx,
+      color : `rgb(${~~(Math.random() * 255)},${~~(Math.random() * 255)}, ${~~(Math.random() * 255)} )`,
+      radius : rad,
+      mass : rad,
     })
   }
 }

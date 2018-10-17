@@ -9,6 +9,9 @@ class Rotate extends Component {
     this.state = {
       canvas: null
     }
+
+    let newReactComponent = Object.assign(Object.create(Component), { })
+    console.log('newReact', newReactComponent)
   }
 
   componentDidMount() {
@@ -23,7 +26,6 @@ class Rotate extends Component {
     this.state.canvas.cleanup()
     this.state.canvas.stop()
   }
-
   render() {
     return (<div />)
   }

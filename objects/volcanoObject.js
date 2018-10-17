@@ -12,7 +12,9 @@ export const volcanoObject = {
   circles: [],
   projectiles: [],
   mouse: {
-    down: false
+    down: false,
+    x: 0,
+    y: 0,
   },
   projectileSize: 200,
   fireWorks: [],
@@ -36,7 +38,8 @@ export const volcanoObject = {
       degRange: this.degRange,
       showFireworks: this.showFireworks,
       bounceVelRatio: this.bounceVelRatio,
-      solid: this.solid
+      solid: this.solid,
+      mouse: this.mouse,
     }
     this.gui.add(controller, 'degRange', 10, 180).step(2).name('Vent ° Range').onChange((value) => {
       if (this.degRange === value) return
@@ -71,7 +74,7 @@ export const volcanoObject = {
       this.solid = value
     })
   },
-  trackMouse(e) {
+  _trackMouse(e) {
     //since the canvas = full page the position of the mouse 
     //relative to the document will suffice
     this.mouse.x = e.pageX;
@@ -94,10 +97,10 @@ export const volcanoObject = {
     this.innerWidth = this.canvas.innerWidth = this.canvas.width = window.innerWidth * 0.9
     this.ctx = this.canvas.getContext("2d")
     this.gui = new dat.GUI({ width: 310 })
-    this.canvas.addEventListener('mousemove', this.trackMouse, false);
-    this.canvas.addEventListener('mousedown', this.trackMouseButton, false);
-    this.canvas.addEventListener('mouseup', this.trackMouseButton, false);
-    this.canvas.addEventListener('mouseleave', this.mouseLeave, false);
+    this.canvas.addEventListener('mousemove', this._trackMouse.bind(this), false);
+    this.canvas.addEventListener('mousedown', this.trackMouseButton.bind(this), false);
+    this.canvas.addEventListener('mouseup', this.trackMouseButton.bind(this), false);
+    this.canvas.addEventListener('mouseleave', this.mouseLeave.bind(this), false);
     this.addGui()
     this.initData()
   },

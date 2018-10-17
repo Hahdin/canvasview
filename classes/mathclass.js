@@ -23,7 +23,7 @@ class MathClass {
     this.cleanup = this.cleanup.bind(this)
     this.createCircle = this.createCircle.bind(this)
   }
-  cleanup(){
+  cleanup() {
     this.state.gui.destroy()
   }
   initCanvas() {
@@ -76,100 +76,100 @@ class MathClass {
       if (this.state.drawTime === value) return
       this.state.drawTime = value
       clearInterval(this.state.drawTimer)
-      this.state.drawTimer = setInterval(() =>{this.draw()}, this.state.drawTime)
+      this.state.drawTimer = setInterval(() => { this.draw() }, this.state.drawTime)
     })
   }
   _fill(color, x, y) {
     lib._fill(this.state.ctx, color, x, y, this.state.innerWidth, this.state.innerHeight)
   }
   fade() {
-    lib.cvFade(this.state.ctx,'rgba(0,0,0, 0.1)',this.state.innerWidth, this.state.innerHeight)
+    lib.cvFade(this.state.ctx, 'rgba(0,0,0, 0.1)', this.state.innerWidth, this.state.innerHeight)
   }
-  stop(){
+  stop() {
     clearInterval(this.state.fadeTimer)
     clearInterval(this.state.drawTimer)
   }
   start() {
-    this.state.drawTimer = setInterval(() =>{this.draw()}, this.state.drawTime)
+    this.state.drawTimer = setInterval(() => { this.draw() }, this.state.drawTime)
     this.state.fadeTimer = setInterval(this.fade.bind(this), this.state.fadeTime)
   }
-  createCircles(){
+  createCircles() {
     let count = this.state.numOfCircles
     this.state.circles = []
-    while(count--){
+    while (count--) {
       this.state.circles.push(new this.createCircle(this.state))
     }
   }
-  createCircle (state){
-    const clr = () =>{
+  createCircle(state) {
+    const clr = () => {
       return `rgba(${~~(Math.random() * 255)},${~~(Math.random() * 255)},${~~(Math.random() * 255)},${Math.random()})`
     }
     this.x = Math.random() * state.innerWidth
     this.y = Math.random() * state.innerHeight
-    this.vx = this.vy = Math.random() *  state.vU - (state.vU/2)
-    this.veerx = this.veery = Math.random() *  state.vQ - (state.vQ/2)
+    this.vx = this.vy = Math.random() * state.vU - (state.vU / 2)
+    this.veerx = this.veery = Math.random() * state.vQ - (state.vQ / 2)
     this.colors = []
     let count = 8
-    while(count--){
+    while (count--) {
       this.colors.push(clr())
     }
     this.radius = 10 + Math.random() * state.maxSize
-    this.angle =  ~~ (Math.random() * 360)
-    this.inc = Math.random() * (Math.PI/3)
+    this.angle = ~~(Math.random() * 360)
+    this.inc = Math.random() * (Math.PI / 3)
     this.lineWidth = Math.random() * state.maxLineWidth
   }
 
-  initData(){
+  initData() {
     //create the circles
     this.createCircles()
   }
-  
+
   draw() {
     let ctx = this.state.ctx
-    this.state.circles.forEach((circle, i) =>{
+    this.state.circles.forEach((circle, i) => {
       ctx.lineWidth = circle.lineWidth
       ctx.shadowOffsetX = ctx.shadowOffsetY = circle.radius / 20
-      let sin = Math.sin(circle.angle * Math.PI/180) * circle.radius
-      let cos = Math.cos(circle.angle * Math.PI/180) * circle.radius
-      
+      let sin = Math.sin(circle.angle * Math.PI / 180) * circle.radius
+      let cos = Math.cos(circle.angle * Math.PI / 180) * circle.radius
+
       ctx.shadowColor = circle.colors[0]
       ctx.strokeStyle = circle.colors[1]
       lib.lineTo(ctx, circle.x, circle.y, circle.x - cos, circle.y + sin);
-      
-			ctx.strokeStyle  = circle.colors[2];
-			ctx.shadowColor  = circle.colors[3];
-      lib.lineTo(ctx, circle.x, circle.y, circle.x + cos, circle.y - sin);
-      
-			ctx.strokeStyle  = circle.colors[4];
-			ctx.shadowColor  = circle.colors[5];
-      lib.lineTo(ctx, circle.x, circle.y, circle.x + cos, circle.y + sin);
-      
-			ctx.strokeStyle  = circle.colors[6];
-			ctx.shadowColor  = circle.colors[7];
-      lib.lineTo(ctx, circle.x, circle.y, circle.x - cos, circle.y - sin);
-      
-      circle.x += circle.vx;
-			circle.y += circle.vy;
-			circle.vx += circle.veerx  * Math.cos(circle.angle * Math.PI/180)  ;
-      circle.vy -= circle.veery * Math.sin(circle.angle * Math.PI/180)  ;
 
-			circle.angle +=circle.inc;
-      circle.radius  -=.01;
+      ctx.strokeStyle = circle.colors[2];
+      ctx.shadowColor = circle.colors[3];
+      lib.lineTo(ctx, circle.x, circle.y, circle.x + cos, circle.y - sin);
+
+      ctx.strokeStyle = circle.colors[4];
+      ctx.shadowColor = circle.colors[5];
+      lib.lineTo(ctx, circle.x, circle.y, circle.x + cos, circle.y + sin);
+
+      ctx.strokeStyle = circle.colors[6];
+      ctx.shadowColor = circle.colors[7];
+      lib.lineTo(ctx, circle.x, circle.y, circle.x - cos, circle.y - sin);
+
+      circle.x += circle.vx;
+      circle.y += circle.vy;
+      circle.vx += circle.veerx * Math.cos(circle.angle * Math.PI / 180);
+      circle.vy -= circle.veery * Math.sin(circle.angle * Math.PI / 180);
+
+      circle.angle += circle.inc;
+      circle.radius -= .01;
       circle.angle = circle.angle > 360 ? circle.angle - 360
-        : circle.angle < 0 ? 360 + circle.angle 
-        : circle.angle
-			ctx.beginPath();
-      
+        : circle.angle < 0 ? 360 + circle.angle
+          : circle.angle
+      ctx.beginPath();
+
       //once offscreen, replace it
       let W = this.state.innerWidth
       let H = this.state.innerHeight
-      if (circle.x > W + (W/2) || 
-      circle.x < -(W/2) || 
-      circle.y > H+H/2 || 
-      circle.y < -(H/2) || 
-      circle.radius <= 0.05){
-				this.state.circles[i] = new this.createCircle(this.state);
-			}
+      if (circle.x > W + (W / 2) ||
+        circle.x < -(W / 2) ||
+        circle.y > H + H / 2 ||
+        circle.y < -(H / 2) ||
+        circle.radius <= 0.05) {
+        this.state.circles[i] = new this.createCircle(this.state);
+      }
     })
   }
 }

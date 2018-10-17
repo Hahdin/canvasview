@@ -17,13 +17,13 @@ export class Connect {
       cohesionDistance: 60,
       cohesionStrength: .001,
       alignmentDistance: 100,
-      alignmentStrength: .01,
-      maxVelocity: 1,
+      alignmentStrength: .001,
+      maxVelocity: 3,
       whoIsNeighbor: 100,
       numberOf: 100,
       consideration: 0.6,
       finLength: 10,
-      sizeMax: 3,
+      sizeMax: 2,
       fadeTime: 120,
       showConnections: false,
     }
@@ -109,7 +109,7 @@ export class Connect {
       this.state.cohesionDistance = value
       this.initData()
     })
-    this.state.gui.add(controller, 'cohesionStrength', 0.001, 1).step(0.001).name('cohesion force').onChange((value) => {
+    this.state.gui.add(controller, 'cohesionStrength', 0.001, 0.01).step(0.001).name('cohesion force').onChange((value) => {
       if (this.state.cohesionStrength === value) return
       this.state.cohesionStrength = value
       this.initData()
@@ -119,7 +119,7 @@ export class Connect {
       this.state.alignmentDistance = value
       this.initData()
     })
-    this.state.gui.add(controller, 'alignmentStrength', 0.001, 1).step(0.001).name('alignment force').onChange((value) => {
+    this.state.gui.add(controller, 'alignmentStrength', 0.001, 0.01).step(0.001).name('alignment force').onChange((value) => {
       if (this.state.alignmentStrength === value) return
       this.state.alignmentStrength = value
       this.initData()

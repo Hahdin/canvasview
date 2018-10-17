@@ -22,25 +22,28 @@ export const MyNavBar = ({ ...props }) => {
             <NavItem eventKey={1}  > Explosion </NavItem>
           </LinkContainer>
           <LinkContainer to="/math">
-            <NavItem eventKey={1}  > Volcano and Fireworks </NavItem>
+            <NavItem eventKey={2}  > Volcano and Fireworks </NavItem>
           </LinkContainer>
           <LinkContainer to="/kinematics">
-            <NavItem eventKey={1}  > Kinematics </NavItem>
+            <NavItem eventKey={3}  > Kinematics </NavItem>
           </LinkContainer>
           <LinkContainer to="/transform">
-            <NavItem eventKey={1}  > Transformations </NavItem>
+            <NavItem eventKey={4}  > Transformations </NavItem>
           </LinkContainer>
           <LinkContainer to="/rotation">
-            <NavItem eventKey={1}  > Rotation </NavItem>
+            <NavItem eventKey={5}  > Rotation </NavItem>
           </LinkContainer>
           <LinkContainer to="/forrest">
-            <NavItem eventKey={1}  > The Forest </NavItem>
+            <NavItem eventKey={6}  > The Forest </NavItem>
           </LinkContainer>
           <LinkContainer to="/game">
-            <NavItem eventKey={1}  > Game of Life </NavItem>
+            <NavItem eventKey={7}  > Game of Life </NavItem>
           </LinkContainer>
           <LinkContainer to="/connect">
-            <NavItem eventKey={1}  > Flock Off </NavItem>
+            <NavItem eventKey={8}  > Flock Off </NavItem>
+          </LinkContainer>
+          <LinkContainer to="/mathart">
+            <NavItem eventKey={9}  > Math Art </NavItem>
           </LinkContainer>
         </Nav>
         <Navbar.Text pullRight style={{ fontSize: '12px', marginRight: '10px' }}>

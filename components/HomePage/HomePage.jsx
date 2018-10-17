@@ -68,11 +68,16 @@ export class HomePage extends React.Component {
     of a life form to keep it interesting.</p>
 
             <h2><LinkContainer to="/connect"><NavItem>Flock Off</NavItem></LinkContainer></h2>
-            <p>This is my latest addition. It began with following a 
+            <p>This began with following a 
               <a href = 'https://www.blog.drewcutchins.com/blog/2018-8-16-flocking'> "flocking example"</a> and
               ended up with a few more variables to adjust. The defaults lead to a "tadpole" type flock/school and
               if you up the max velocity and increase the cohesion factor to 0.1, acts more like a swarm of flies.
             Play around and have fun.</p>
+
+            <h2><LinkContainer to="/mathart"><NavItem>Math Art</NavItem></LinkContainer></h2>
+            <p>This was something I made while working on a project that involved a lot of trig. 
+              It began simply as an attempt to visulize some of the functions.</p>
+
 
 
           </div>

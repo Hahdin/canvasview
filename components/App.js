@@ -7,6 +7,7 @@ import Rotate from '../containers/Rotation'
 import TheForrest from '../containers/TheForrest'
 import TheGame from '../containers/TheGame'
 import Connections from '../containers/Connections'
+import MathArt from '../containers/Mathart'
 import { Route, Router } from "react-router-dom";
 import { history } from '../helpers'
 import { MyNavBar } from '../components/MyNavBar';
@@ -33,6 +34,7 @@ class App extends Component {
               <Route path={`${path}forrest`} component={TheForrest} />
               <Route path={`${path}game`} component={TheGame} />
               <Route path={`${path}connect`} component={Connections} />
+              <Route path={`${path}mathart`} component={MathArt} />
             </div>
           </Router>
         </div>

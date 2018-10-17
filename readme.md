@@ -30,8 +30,10 @@ My implementation takes no user input. It starts with a random placement of "liv
 
 
 ## Flock Off
-This is my latest addition. It began with following a "flocking" [tutorial](https://www.blog.drewcutchins.com/blog/2018-8-16-flocking) and ended up with a few more variables to adjust. The defaults lead to a "tadpole" type flock/school and if you up the max velocity and increase the cohesion factor to 0.1, acts more like a swarm of flies. Play around and have fun.
+This began with following a "flocking" [tutorial](https://www.blog.drewcutchins.com/blog/2018-8-16-flocking) and ended up with a few more variables to adjust. The defaults lead to a "tadpole" type flock/school and if you up the max velocity and increase the cohesion factor to 0.1, acts more like a swarm of flies. Play around and have fun.
 
+## Math Art
+This was something I made while working on a [project](https://www.powerlogger.com/steer.asp) that involved a lot of trig. I began simply attempting to visulize some of the functions.
 
 ### Some technical aspects.
 

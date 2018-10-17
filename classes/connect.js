@@ -60,7 +60,7 @@ export class Connect {
       ctx: this.state.ctx,
       showConnections: this.state.showConnections,
     }
-    this.state.flock = new Flock(this.state.numberOf, { x: this.state.canvas.innerWidth / 2, y: this.state.canvas.innerHeight / 2 }, defaults)
+    this.state.flock = new Flock(this.state.numberOf, { x: (window.innerWidth * 0.9) / 2, y: (window.innerHeight * 0.9) / 2 }, defaults)
 
   }
   addGui() {

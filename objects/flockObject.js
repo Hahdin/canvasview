@@ -1,202 +1,194 @@
 const dat = require('dat.gui');
-import lib from './lib'
-export class Connect {
-  constructor(props) {
-    this.state = {
-      innerWidth: 0,
-      innerHeight: 0,
-      ctx: null,
-      canvas: null,
-      gui: null,
-      drawTimer: null,
-      fadeTimer: null,
-      //specific stuff
-      flock: null,
-      separationDistance: 50,
-      separationStrength: 100,
-      cohesionDistance: 60,
-      cohesionStrength: .001,
-      alignmentDistance: 100,
-      alignmentStrength: .001,
-      maxVelocity: 3,
-      whoIsNeighbor: 100,
-      numberOf: 100,
-      consideration: 0.6,
-      finLength: 10,
-      sizeMax: 2,
-      fadeTime: 120,
-      showConnections: false,
-    }
-    this.cleanup = this.cleanup.bind(this)
-  }
+import {lib} from '../helpers/'
+export const flockObject = {
+  innerWidth: 0,
+  innerHeight: 0,
+  ctx: null,
+  canvas: null,
+  gui: null,
+  drawTimer: null,
+  fadeTimer: null,
+  //specific stuff
+  flock: null,
+  separationDistance: 50,
+  separationStrength: 100,
+  cohesionDistance: 60,
+  cohesionStrength: .001,
+  alignmentDistance: 100,
+  alignmentStrength: .001,
+  maxVelocity: 3,
+  whoIsNeighbor: 100,
+  numberOf: 100,
+  consideration: 0.6,
+  finLength: 10,
+  sizeMax: 2,
+  fadeTime: 120,
+  showConnections: false,
   cleanup() {
-    this.state.gui.destroy()
-  }
-  initCanvas() {
-    this.state.canvas = document.getElementById("canvas")
-    this.state.innerHeight = this.state.canvas.innerHeight = this.state.canvas.height = window.innerHeight * 0.9
-    this.state.innerWidth = this.state.canvas.innerWidth = this.state.canvas.width = window.innerWidth * 0.9
-    this.state.ctx = this.state.canvas.getContext("2d")
-    this.state.gui = new dat.GUI({ width: 400 })
-    this.initData()
-    this.addGui()
-  }
-  //////////////////////////
-  initData() {
-    //create some random points in space
-    if (this.state.flock)
-      this.state.flock = null
-    let defaults = {
-      separationDistance: this.state.separationDistance,
-      separationStrength: this.state.separationStrength,
-      cohesionDistance: this.state.cohesionDistance,
-      cohesionStrength: this.state.cohesionStrength,
-      alignmentDistance: this.state.alignmentDistance,
-      alignmentStrength: this.state.alignmentStrength,
-      maxVelocity: this.state.maxVelocity,
-      whoIsNeighbor: this.state.whoIsNeighbor,
-      consideration: this.state.consideration,
-      sizeMax: this.state.sizeMax,
-      ctx: this.state.ctx,
-      showConnections: this.state.showConnections,
-    }
-    this.state.flock = new Flock(this.state.numberOf, { x: (window.innerWidth * 0.9) / 2, y: (window.innerHeight * 0.9) / 2 }, defaults)
-
-  }
+    this.gui.destroy()
+  },
   addGui() {
-    if (!this.state.flock)
+    if (!this.flock)
       return
-    if (this.state.gui) {
-      this.state.gui.destroy()
-      this.state.gui = null
+    if (this.gui) {
+      this.gui.destroy()
+      this.gui = null
     }
-    this.state.gui = new dat.GUI({ width: 400 })
+    this.gui = new dat.GUI({ width: 400 })
     let controller = {
-      whoIsNeighbor: this.state.whoIsNeighbor,
-      separationDistance: this.state.separationDistance,
-      separationStrength: this.state.separationStrength,
-      cohesionDistance: this.state.cohesionDistance,
-      cohesionStrength: this.state.cohesionStrength,
-      alignmentDistance: this.state.alignmentDistance,
-      alignmentStrength: this.state.alignmentStrength,
-      maxVelocity: this.state.maxVelocity,
-      numberOf: this.state.numberOf,
-      consideration: this.state.consideration,
-      finLength: this.state.finLength,
-      sizeMax: this.state.sizeMax,
-      fadeTime: this.state.fadeTime,
-      showConnections: this.state.showConnections,
+      whoIsNeighbor: this.whoIsNeighbor,
+      separationDistance: this.separationDistance,
+      separationStrength: this.separationStrength,
+      cohesionDistance: this.cohesionDistance,
+      cohesionStrength: this.cohesionStrength,
+      alignmentDistance: this.alignmentDistance,
+      alignmentStrength: this.alignmentStrength,
+      maxVelocity: this.maxVelocity,
+      numberOf: this.numberOf,
+      consideration: this.consideration,
+      finLength: this.finLength,
+      sizeMax: this.sizeMax,
+      fadeTime: this.fadeTime,
+      showConnections: this.showConnections,
     }
-    this.state.gui.add(controller, 'whoIsNeighbor', 1, 500).step(1).name('Neighbor distance').onChange((value) => {
-      if (this.state.whoIsNeighbor === value) return
-      this.state.whoIsNeighbor = value
-      this.state.flock.neighborDistance = value
-      this.state.flock.neighborDistanceSquared = Math.pow(value, 2);
+    this.gui.add(controller, 'whoIsNeighbor', 1, 500).step(1).name('Neighbor distance').onChange((value) => {
+      if (this.whoIsNeighbor === value) return
+      this.whoIsNeighbor = value
+      this.flock.neighborDistance = value
+      this.flock.neighborDistanceSquared = Math.pow(value, 2);
 
     })
-    this.state.gui.add(controller, 'separationDistance', 1, 200).step(1).name('Keep this far apart').onChange((value) => {
-      if (this.state.separationDistance === value) return
-      this.state.separationDistance = value
+    this.gui.add(controller, 'separationDistance', 1, 200).step(1).name('Keep this far apart').onChange((value) => {
+      if (this.separationDistance === value) return
+      this.separationDistance = value
       this.initData()
     })
-    this.state.gui.add(controller, 'separationStrength', 1, 100).step(1).name('separation force').onChange((value) => {
-      if (this.state.separationStrength === value) return
-      this.state.separationStrength = value
+    this.gui.add(controller, 'separationStrength', 1, 100).step(1).name('separation force').onChange((value) => {
+      if (this.separationStrength === value) return
+      this.separationStrength = value
       this.initData()
     })
-    this.state.gui.add(controller, 'cohesionDistance', 1, 200).step(1).name('Keep this close together').onChange((value) => {
-      if (this.state.cohesionDistance === value) return
-      this.state.cohesionDistance = value
+    this.gui.add(controller, 'cohesionDistance', 1, 200).step(1).name('Keep this close together').onChange((value) => {
+      if (this.cohesionDistance === value) return
+      this.cohesionDistance = value
       this.initData()
     })
-    this.state.gui.add(controller, 'cohesionStrength', 0.001, 0.01).step(0.001).name('cohesion force').onChange((value) => {
-      if (this.state.cohesionStrength === value) return
-      this.state.cohesionStrength = value
+    this.gui.add(controller, 'cohesionStrength', 0.001, 0.01).step(0.001).name('cohesion force').onChange((value) => {
+      if (this.cohesionStrength === value) return
+      this.cohesionStrength = value
       this.initData()
     })
-    this.state.gui.add(controller, 'alignmentDistance', 1, this.state.innerWidth).step(1).name('Align with neighbors').onChange((value) => {
-      if (this.state.alignmentDistance === value) return
-      this.state.alignmentDistance = value
+    this.gui.add(controller, 'alignmentDistance', 1, this.innerWidth).step(1).name('Align with neighbors').onChange((value) => {
+      if (this.alignmentDistance === value) return
+      this.alignmentDistance = value
       this.initData()
     })
-    this.state.gui.add(controller, 'alignmentStrength', 0.001, 0.01).step(0.001).name('alignment force').onChange((value) => {
-      if (this.state.alignmentStrength === value) return
-      this.state.alignmentStrength = value
+    this.gui.add(controller, 'alignmentStrength', 0.001, 0.01).step(0.001).name('alignment force').onChange((value) => {
+      if (this.alignmentStrength === value) return
+      this.alignmentStrength = value
       this.initData()
     })
-    this.state.gui.add(controller, 'maxVelocity', 1, 10).step(1).name('Max Vel.').onChange((value) => {
-      if (this.state.maxVelocity === value) return
-      this.state.maxVelocity = value
+    this.gui.add(controller, 'maxVelocity', 1, 10).step(1).name('Max Vel.').onChange((value) => {
+      if (this.maxVelocity === value) return
+      this.maxVelocity = value
       this.initData()
     })
-    this.state.gui.add(controller, 'numberOf', 2, 200).step(1).name('Number of Particles').onChange((value) => {
-      if (this.state.numberOf === value) return
-      this.state.numberOf = value
+    this.gui.add(controller, 'numberOf', 2, 200).step(1).name('Number of Particles').onChange((value) => {
+      if (this.numberOf === value) return
+      this.numberOf = value
       this.initData()
     })
-    this.state.gui.add(controller, 'consideration', 0, 1).step(.1).name('Consideration of Neighbors').onChange((value) => {
-      if (this.state.consideration === value) return
-      this.state.consideration = value
+    this.gui.add(controller, 'consideration', 0, 1).step(.1).name('Consideration of Neighbors').onChange((value) => {
+      if (this.consideration === value) return
+      this.consideration = value
       this.initData()
     })
-    this.state.gui.add(controller, 'finLength', 0, 20).step(1).name('Fin Length').onChange((value) => {
-      if (this.state.finLength === value) return
-      this.state.finLength = value
+    this.gui.add(controller, 'finLength', 0, 20).step(1).name('Fin Length').onChange((value) => {
+      if (this.finLength === value) return
+      this.finLength = value
     })
-    this.state.gui.add(controller, 'sizeMax', 2, 20).step(1).name('Max. Size').onChange((value) => {
-      if (this.state.sizeMax === value) return
-      this.state.sizeMax = value
+    this.gui.add(controller, 'sizeMax', 2, 20).step(1).name('Max. Size').onChange((value) => {
+      if (this.sizeMax === value) return
+      this.sizeMax = value
       this.initData()
     })
-    this.state.gui.add(controller, 'fadeTime', 60, 240).step(1).name('Fade time (ms)').onChange((value) => {
-      if (this.state.fadeTime === value) return
-      this.state.fadeTime = value
-      clearInterval(this.state.fadeTimer)
-      this.state.fadeTimer = setInterval(this.fade.bind(this), this.state.fadeTime)
+    this.gui.add(controller, 'fadeTime', 60, 240).step(1).name('Fade time (ms)').onChange((value) => {
+      if (this.fadeTime === value) return
+      this.fadeTime = value
+      clearInterval(this.fadeTimer)
+      this.fadeTimer = setInterval(this.fade.bind(this), this.fadeTime)
     })
-    this.state.gui.add(controller, 'showConnections', 0, 1).name('Show Connections').onChange((value) => {
-      if (this.state.showConnections === value) return
-      this.state.showConnections = value
+    this.gui.add(controller, 'showConnections', 0, 1).name('Show Connections').onChange((value) => {
+      if (this.showConnections === value) return
+      this.showConnections = value
       this.initData()
     })
-  }
-  _fill(color, x, y) {
-    lib._fill(this.state.ctx, color, x, y, this.state.innerWidth, this.state.innerHeight)
-  }
-  fade() {
-    lib.cvFade(this.state.ctx, 'rgba(0,0,0, 0.1)', this.state.innerWidth, this.state.innerHeight)
-  }
-  stop() {
-    clearInterval(this.state.fadeTimer)
-    clearInterval(this.state.drawTimer)
-  }
-  start() {
-    this.state.drawTimer = setInterval(() => {
-      this.draw()
-    }, 60)
-    this.state.fadeTimer = setInterval(this.fade.bind(this), this.state.fadeTime)
-  }
-  draw() {
-    this.state.flock.updateFlock()
+  },
+  initData() {
+    if (this.flock)
+      this.flock = null
+    let defaults = {
+      separationDistance: this.separationDistance,
+      separationStrength: this.separationStrength,
+      cohesionDistance: this.cohesionDistance,
+      cohesionStrength: this.cohesionStrength,
+      alignmentDistance: this.alignmentDistance,
+      alignmentStrength: this.alignmentStrength,
+      maxVelocity: this.maxVelocity,
+      whoIsNeighbor: this.whoIsNeighbor,
+      consideration: this.consideration,
+      sizeMax: this.sizeMax,
+      ctx: this.ctx,
+      showConnections: this.showConnections,
+    }
+    this.flock = new Flock(this.numberOf, { x: (window.innerWidth * 0.9) / 2, y: (window.innerHeight * 0.9) / 2 }, defaults)
+  },
+  initCanvas() {
+    this.canvas = document.getElementById("canvas")
+    this.innerHeight = this.canvas.innerHeight = this.canvas.height = window.innerHeight * 0.9
+    this.innerWidth = this.canvas.innerWidth = this.canvas.width = window.innerWidth * 0.9
+    this.ctx = this.canvas.getContext("2d")
+    this.gui = new dat.GUI({ width: 310 })
+    this.initData()
+    this.addGui() 
+  },
+  draw(){
+    this.flock.updateFlock()
     let wing = 0.87
     //modify fin length by radius
-    this.state.flock.boids.forEach(boid => {
-      let fin = this.state.finLength * (boid.radius / 2)
+    this.flock.boids.forEach(boid => {
+      let fin = this.finLength * (boid.radius / 2)
       //fin = fin >= 10 ? fin : 10
-      this.state.ctx.fillStyle = boid.color
-      this.state.ctx.strokeStyle = boid.color
-      lib.drawSphere(this.state.ctx, { x: boid.position.x, y: boid.position.y }, boid.radius)
+      this.ctx.fillStyle = boid.color
+      this.ctx.strokeStyle = boid.color
+      lib.drawSphere(this.ctx, { x: boid.position.x, y: boid.position.y }, boid.radius)
       let heading = boid.getheading()
       let lineX = fin * Math.cos(heading - wing)
       let lineY = fin * Math.sin(heading - wing)
-      lib.lineTo(this.state.ctx, boid.position.x, boid.position.y, boid.position.x + lineX, boid.position.y + lineY)
+      lib.lineTo(this.ctx, boid.position.x, boid.position.y, boid.position.x + lineX, boid.position.y + lineY)
       lineX = -fin * Math.cos(heading + wing)
       lineY = -fin * Math.sin(heading + wing)
       let linesize = boid.radius / 4
-      this.state.ctx.lineWidth = linesize > 0.7 ? 0.7 : linesize
-      lib.lineTo(this.state.ctx, boid.position.x, boid.position.y, boid.position.x + lineX, boid.position.y + lineY)
+      this.ctx.lineWidth = linesize > 0.7 ? 0.7 : linesize
+      lib.lineTo(this.ctx, boid.position.x, boid.position.y, boid.position.x + lineX, boid.position.y + lineY)
     })
-  }
+  },
+  start() {
+    this.drawTimer = setInterval(() => {
+      this.draw()
+    }, 60)
+    this.fadeTimer = setInterval(() => { this.fade() }, this.fadeTime)
+  },
+  stop(){
+    clearInterval(this.fadeTimer)
+    clearInterval(this.drawTimer)
+  },
+  _fill(color, x, y) {
+    lib._fill(this.ctx, color, x, y, this.innerWidth, this.innerHeight)
+  },
+  fade() {
+    lib.cvFade(this.ctx, 'rgba(0,0,0, 0.1)', this.innerWidth, this.innerHeight)
+  },
 }
 
 class Boid {
@@ -398,4 +390,4 @@ class Flock {
     })
   }
 }
-export default Connect
+export default flockObject

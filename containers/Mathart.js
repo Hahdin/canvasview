@@ -1,5 +1,14 @@
 import React, { Component } from 'react'
-import MathClass from '../classes/mathclass'
+import { MathObject } from '../objects'
+const _mathobject = () =>{
+  let __private = 'this is private'
+  return Object.assign(Object.create(MathObject), {
+    secret(){
+      return __private
+    }
+  })
+}
+
 class MathArt extends Component {
   constructor(props) {
     super(props)
@@ -8,14 +17,14 @@ class MathArt extends Component {
     }
   }
   componentDidMount() {
-    let canvas = new MathClass()
+    let canvas = _mathobject()
     canvas.initCanvas()
     canvas._fill('rgba(0,0,0, 1)', 0, 0)
     canvas.start()
     this.state.canvas = canvas
   }
   componentWillUnmount(){
-    this.state.canvas.cleanup()
+    this.state.canvas.cleanup() 
     this.state.canvas.stop()
   }
   render() {

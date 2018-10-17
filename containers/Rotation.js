@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
-import Rotation from '../classes/rotation'
+import { rotationObject } from '../objects'
+const _rotationObject = () =>{
+  return Object.assign(Object.create(rotationObject), { })
+}
 class Rotate extends Component {
   constructor(props) {
     super(props)
@@ -9,7 +12,7 @@ class Rotate extends Component {
   }
 
   componentDidMount() {
-    let rot = new Rotation()
+    let rot = _rotationObject()
     rot.initCanvas()
     rot._fill('rgba(0,0,0, 1)', 0, 0)
     rot.start()

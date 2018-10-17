@@ -1,4 +1,4 @@
-export default {
+export const lib = {
   drawSphere: (ctx, point, radius) =>{
       ctx.beginPath()
       ctx.arc(point.x, point.y, radius, Math.PI * 2, false)
@@ -42,4 +42,5 @@ export default {
     ctx.fillRect(x, y, width, height)
   },
 }
+export default lib
 

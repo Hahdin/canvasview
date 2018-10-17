@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
-import Explosion from '../classes/explosion'
+import { explosionObject } from '../objects'
+const _explosionObject = () =>{
+  return Object.assign(Object.create(explosionObject), { })
+}
 class LogCanvas extends Component {
   constructor(props) {
     super(props)
@@ -10,15 +13,13 @@ class LogCanvas extends Component {
   }
 
   componentDidMount() {
-    //_myLogCanvas.initLog(this.state.curves)
-    let myExplosion = new Explosion()
+    let myExplosion = _explosionObject()
     myExplosion.initCanvas()
     myExplosion._fill('rgba(0,0,0, 1)', 0, 0)
     myExplosion.start()
     this.state.explosion = myExplosion
   }
   componentWillUnmount(){
-    console.log('unmount LogCanvas')
     this.state.explosion.cleanup()
     this.state.explosion.stop()
   }

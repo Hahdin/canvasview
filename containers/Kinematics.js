@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
-import KinCanvas from '../classes/kinematics'
+import { kinematicsObject } from '../objects'
+const _kinematicsObject = () =>{
+  return Object.assign(Object.create(kinematicsObject), { })
+}
 class Kinematics extends Component {
   constructor(props) {
     super(props)
@@ -9,7 +12,7 @@ class Kinematics extends Component {
   }
 
   componentDidMount() {
-    let _kinCanvas = new KinCanvas()
+    let _kinCanvas = _kinematicsObject()
     _kinCanvas.initCanvas()
     _kinCanvas._fill('rgba(0,0,0, 1)', 0, 0)
     _kinCanvas.start()

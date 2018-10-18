@@ -2,13 +2,6 @@ const dat = require('dat.gui');
 import {lib} from '../helpers/'
 import parentObject from './parentObject'
 export const explosionChild = {
-  innerWidth: 0,
-  innerHeight: 0,
-  ctx: null,
-  canvas: null,
-  gui: null,
-  drawTimer: null,
-  fadeTimer: null,
   //specific stuff
   explosions: [],
   particles: [],
@@ -18,51 +11,12 @@ export const explosionChild = {
   cleanup() {
     this.gui.destroy()
   },
-  initCanvas() {
-    this.canvas = document.getElementById("canvas")
-    this.innerHeight = this.canvas.innerHeight = this.canvas.height = window.innerHeight * 0.9
-    this.innerWidth = this.canvas.innerWidth = this.canvas.width = window.innerWidth * 0.9
-    this.ctx = this.canvas.getContext("2d")
-    this.gui = new dat.GUI({ width: 310 })
-    this.addGui()
-    this.initData()
-
-
-    //a test
-    const Parent = {
-      msg: '',
-      parentMethod() {
-        return null
-      },
-      create({ ...args }) {
-        return Object.assign(Object.create(this), { ...args })
-      },
-    }
-    
-    const Child = {
-      create({ ...args }) {
-        return Object.assign(Object.create(this), { ...args })
-      },
-    }
-    
-    let _parent = Parent.create({msg:'testing', parentMethod(){return this.msg}})
-    let _child = Child.create(_parent)
-    console.log('###',_child.parentMethod())
-    
-  },
   start() {
     this.fadeTimer = setInterval(() => { this.fade() }, 200)
     this.drawTimer = setInterval(() =>{
       this.drawExplosions()
       this.drawParticles()
     }, 60)
-  },
-  stop() {
-    clearInterval(this.fadeTimer)
-    clearInterval(this.drawTimer)
-  },
-  _fill(color, x, y) {
-    lib._fill(this.ctx, color, x, y, this.innerWidth, this.innerHeight)
   },
   addGui() {
     let controller = {
@@ -148,10 +102,8 @@ export const explosionChild = {
       this.explosions.push(this.createExplosion({ x: this.innerWidth / 2, y: this.innerHeight / 2 }))
     }
   },
-  create() {
-    let p = parentObject.create()
-    this.fade = p.fade
-    return Object.assign(Object.create(this), { })
+  create({ ...args }) {
+    return Object.assign(Object.create(this), { ...args })
   },
 }
 export default explosionChild

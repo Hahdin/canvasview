@@ -14,7 +14,7 @@ export const HomePage = ({...props}) => {
         padding: '10px',
         boxShadow: '2px 2px 10px black'
       }}>
-        <h1>CanvasViews</h1>
+        <h1> CanvasViews </h1>
         <p>This is just a hobby app of mine that demonstrates various interesting visual displays created on the html canvas. </p>
         <div style={{
           backgroundColor: 'white',

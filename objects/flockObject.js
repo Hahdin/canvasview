@@ -83,7 +83,7 @@ export const flockObject = {
       this.alignmentDistance = value
       this.initData()
     })
-    this.gui.add(controller, 'alignmentStrength', 0.001, 0.01).step(0.001).name('alignment force').onChange((value) => {
+    this.gui.add(controller, 'alignmentStrength', 0, 0.01).step(0.001).name('alignment force').onChange((value) => {
       if (this.alignmentStrength === value) return
       this.alignmentStrength = value
       this.initData()
@@ -238,6 +238,9 @@ const _Boid = {
   color : '',
   radius : 0,
   mass : 0,
+  pcntX: 0,//test, % vel x changes that are negative - left
+  pcntY: 0,//test, % vel y changes that are negative - up
+  updates: 0,//# of updates
   getheading() {
     return Math.atan2(this.velocity.x, this.velocity.y);
   },
@@ -344,6 +347,15 @@ const _Boid = {
     this.velocity.x = this.velocity.x > velMax ? velMax : this.velocity.x < -velMax ? -velMax : this.velocity.x
     this.velocity.y = this.velocity.y > velMax ? velMax : this.velocity.y < -velMax ? -velMax : this.velocity.y
 
+    this.updates = this.updates + 1
+    if (this.velocity.x < 0){
+      this.pcntX = this.pcntX + 1
+    }
+    if (this.velocity.y < 0){
+      this.pcntY = this.pcntY + 1
+    }
+    let curPcntX =  this.pcntX / this.updates  * 100
+    let curPcnty = this.pcntY / this.updates  * 100
     //  Veloity is change in position
     this.position.x += this.velocity.x;
     this.position.y += this.velocity.y;

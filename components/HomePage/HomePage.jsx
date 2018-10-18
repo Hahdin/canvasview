@@ -16,6 +16,7 @@ export const HomePage = ({...props}) => {
       }}>
         <h1> CanvasViews </h1>
         <p>This is just a hobby app of mine that demonstrates various interesting visual displays created on the html canvas. </p>
+        <h5><a href = 'https://github.com/Hahdin/canvasview'target='_blank'>Code on github</a></h5>
         <div style={{
           backgroundColor: 'white',
           border: 'thick solid black',

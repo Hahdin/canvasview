@@ -179,6 +179,8 @@ export const forestObject = {
     let epy = y + length * Math.sin(a * Math.PI / 180);
     return { x: epx, y: epy };
   },
-
+  create() {
+    return Object.assign(Object.create(this), { })
+  },
 }
 export default forestObject

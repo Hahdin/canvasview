@@ -43,5 +43,8 @@ export const templateObject = {
   fade() {
     lib.cvFade(this.ctx, 'rgba(0,0,0, 0.1)', this.innerWidth, this.innerHeight)
   },
+  create() {
+    return Object.assign(Object.create(this), { })
+  },
 }
 export default templateObject

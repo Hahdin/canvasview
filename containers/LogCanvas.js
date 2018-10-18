@@ -1,8 +1,5 @@
 import React, { Component } from 'react'
 import { explosionObject } from '../objects'
-const _explosionObject = () =>{
-  return Object.assign(Object.create(explosionObject), { })
-}
 class LogCanvas extends Component {
   constructor(props) {
     super(props)
@@ -11,9 +8,8 @@ class LogCanvas extends Component {
       explosion: null
     }
   }
-
   componentDidMount() {
-    let myExplosion = _explosionObject()
+    let myExplosion = explosionObject.create()
     myExplosion.initCanvas()
     myExplosion._fill('rgba(0,0,0, 1)', 0, 0)
     myExplosion.start()

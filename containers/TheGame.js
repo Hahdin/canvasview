@@ -1,8 +1,5 @@
 import React, { Component } from 'react'
 import { GOLObject } from '../objects'
-const _GOLObject = () =>{
-  return Object.assign(Object.create(GOLObject), { })
-}
 class TheGame extends Component {
   constructor(props) {
     super(props)
@@ -11,7 +8,7 @@ class TheGame extends Component {
     }
   }
   componentDidMount() {
-    let myGOL = _GOLObject()
+    let myGOL = GOLObject.create()
     myGOL.initCanvas()
     myGOL.start()
     this.state.canvas = myGOL

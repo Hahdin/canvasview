@@ -389,6 +389,9 @@ export const volcanoObject = {
           this.projectiles.push(this.createProjectile())
       }
     })
-  }
+  },
+  create() {
+    return Object.assign(Object.create(this), { })
+  },
 }
 export default volcanoObject

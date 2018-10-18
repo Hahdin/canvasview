@@ -224,6 +224,9 @@ export const rotationObject = {
       lib.lineTo(this.ctx, 0, 0, point.x, point.y)
       lib.drawSphere(this.ctx, {x: point.x, y: point.y}, rad)
     })
-  }
+  },
+  create() {
+    return Object.assign(Object.create(this), { })
+  },
 }
 export default rotationObject

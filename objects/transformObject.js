@@ -167,6 +167,9 @@ export const transformObject = {
       let color = rule.getColor()
       this.plot(x, y, color)
     }
-  }
+  },
+  create() {
+    return Object.assign(Object.create(this), { })
+  },
 }
 export default transformObject

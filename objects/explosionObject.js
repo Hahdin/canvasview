@@ -127,7 +127,8 @@ export const explosionObject = {
       this.explosions.push(this.createExplosion({ x: this.innerWidth / 2, y: this.innerHeight / 2 }))
     }
   },
-  draw() {
+  create() {
+    return Object.assign(Object.create(this), { })
   },
 }
 export default explosionObject

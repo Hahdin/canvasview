@@ -125,5 +125,8 @@ export const GOLObject = {
       count++
     return count
   },
+  create() {
+    return Object.assign(Object.create(this), { })
+  },
 }
 export default GOLObject

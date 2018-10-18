@@ -140,26 +140,34 @@ export const flockObject = {
       sizeMax: this.sizeMax,
       ctx: this.ctx,
       showConnections: this.showConnections,
+      flockSize: this.numberOf,
+      center:{
+        x: this.innerWidth / 2,
+        y: this.innerHeight / 2
+      },
+      neighborDistance: this.whoIsNeighbor,
+      neighborDistanceSquared: this.whoIsNeighbor ** 2,
+      boids: [],
     }
-    let _flock = this.flockFactory( defaults)
+    let _flock = _Flock.create( defaults)
     _flock.populateFlock()
     this.flock = _flock
   },
-  flockFactory(defaults) {
-    return Object.assign(Object.create(_Flock), {
-      flockSize: this.numberOf,
-      center:{
-        x: (window.innerWidth * 0.9) / 2,
-        y: (window.innerHeight * 0.9) / 2
-      },
-      defaults,
-      boids: [],
-      ctx: defaults.ctx,
-      showConnections: defaults.showConnections,
-      neighborDistance: this.whoIsNeighbor,
-      neighborDistanceSquared: this.whoIsNeighbor ** 2,
-    })
-  },
+  // flockFactory(defaults) {
+  //   return Object.assign(Object.create(_Flock), {
+  //     flockSize: this.numberOf,
+  //     center:{
+  //       x: (window.innerWidth * 0.9) / 2,
+  //       y: (window.innerHeight * 0.9) / 2
+  //     },
+  //     defaults,
+  //     boids: [],
+  //     ctx: defaults.ctx,
+  //     showConnections: defaults.showConnections,
+  //     neighborDistance: this.whoIsNeighbor,
+  //     neighborDistanceSquared: this.whoIsNeighbor ** 2,
+  //   })
+  // },
   initCanvas() {
     this.canvas = document.getElementById("canvas")
     this.innerHeight = this.canvas.innerHeight = this.canvas.height = window.innerHeight * 0.9
@@ -205,6 +213,9 @@ export const flockObject = {
   },
   fade() {
     lib.cvFade(this.ctx, 'rgba(0,0,0, 0.1)', this.innerWidth, this.innerHeight)
+  },
+  create() {
+    return Object.assign(Object.create(this), { })
   },
 }
 const _Boid = {
@@ -350,6 +361,9 @@ const _Boid = {
     }
     this.acceleration = { x: 0, y: 0 };
   },
+  create({...args}) {
+    return Object.assign(Object.create(this), {...args })
+  },
 }
 const _Flock ={
   flockSize: 1,
@@ -366,7 +380,30 @@ const _Flock ={
   populateFlock() {
     for (var n = 0; n < this.flockSize; n++) {
       //  The boids will be created at the center of the graph.
-      let newBoid = this.boidFactory({ })
+      let rad = (Math.random() * this.sizeMax)
+      let newBoid = _Boid.create({
+        x: this.center.x,
+        y: this.center.y,
+        area: {
+          x:this.center.x * 2,
+          y:this.center.y * 2,
+        },
+        position : { x: Math.round(Math.random() * this.center.x * 2), y: Math.round(Math.random() * this.center.y * 2) },
+        velocity : { x: 0, y: 0 },
+        acceleration : { x: 0, y: 0 },
+        separationDistance : this.separationDistance,
+        separationStrength : this.separationStrength,
+        cohesionDistance : this.cohesionDistance,
+        cohesionStrength : this.cohesionStrength,
+        alignmentDistance : this.alignmentDistance,
+        alignmentStrength : this.alignmentStrength,
+        maxVelocity : this.maxVelocity,
+        consideration : this.consideration,
+        ctx : this.ctx,
+        color : `rgb(${~~(Math.random() * 255)},${~~(Math.random() * 255)}, ${~~(Math.random() * 255)} )`,
+        radius : rad,
+        mass : rad,
+      })
       //  The angle of the boids are evenly distributed in a circle
       let angle = (n / this.flockSize) * 2 * Math.PI;
       //  The velocity is set based on the calculated angle
@@ -399,31 +436,8 @@ const _Flock ={
       neighbors = []
     })
   },
-  boidFactory  () {
-    let rad = (Math.random() * this.defaults.sizeMax)
-    return Object.assign(Object.create(_Boid), {
-      x: this.center.x,
-      y: this.center.y,
-      area: {
-        x:this.center.x * 2,
-        y:this.center.y * 2,
-      },
-      position : { x: Math.round(Math.random() * this.center.x * 2), y: Math.round(Math.random() * this.center.y * 2) },
-      velocity : { x: 0, y: 0 },
-      acceleration : { x: 0, y: 0 },
-      separationDistance : this.defaults.separationDistance,
-      separationStrength : this.defaults.separationStrength,
-      cohesionDistance : this.defaults.cohesionDistance,
-      cohesionStrength : this.defaults.cohesionStrength,
-      alignmentDistance : this.defaults.alignmentDistance,
-      alignmentStrength : this.defaults.alignmentStrength,
-      maxVelocity : this.defaults.maxVelocity,
-      consideration : this.defaults.consideration,
-      ctx : this.defaults.ctx,
-      color : `rgb(${~~(Math.random() * 255)},${~~(Math.random() * 255)}, ${~~(Math.random() * 255)} )`,
-      radius : rad,
-      mass : rad,
-    })
-  }
+  create({...args}) {
+    return Object.assign(Object.create(this), {...args })
+  },
 }
 export default flockObject

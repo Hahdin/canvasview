@@ -120,7 +120,7 @@ export const MathObject = {
         circle.y > H + H / 2 ||
         circle.y < -(H / 2) ||
         circle.radius <= 0.05) {
-          let _circle = circleFactory(this.innerWidth, this.innerHeight,this.vU, this.vQ, this.maxSize, this.maxLineWidth);
+          let _circle = circle.create(this.innerWidth, this.innerHeight,this.vU, this.vQ, this.maxSize, this.maxLineWidth);
           _circle.makeColors()
           this.circles[i] = _circle;
         }
@@ -144,19 +144,22 @@ export const MathObject = {
     let count = this.numOfCircles
     this.circles = []
     while (count--) {
-      let _circle = circleFactory(this.innerWidth, this.innerHeight,this.vU, this.vQ, this.maxSize, this.maxLineWidth);
+      let _circle = circle.create(this.innerWidth, this.innerHeight,this.vU, this.vQ, this.maxSize, this.maxLineWidth);
       _circle.makeColors()
       this.circles.push(_circle)
     }
-  }
+  },
+  create() {
+    return Object.assign(Object.create(this), { })
+  },
 }
-
-
 let circle = {
   x: 0,
   y: 0,
   vx: 0,
   vy: 0,
+  veerx: 0,
+  veery: 0,
   colors: [],
   radius: 0,
   inc: 0,
@@ -167,21 +170,21 @@ let circle = {
     while (count--) {
       this.colors.push(`rgba(${~~(Math.random() * 255)},${~~(Math.random() * 255)},${~~(Math.random() * 255)},${Math.random()})`)
     }
-  }
-};
-let circleFactory =  (W, H, vU, vQ, size, line) => {
-  return Object.assign(Object.create(circle), {
-    x : Math.random() * W,
-    y : Math.random() * H,
-    vx : Math.random() * vU - (vU / 2),
-    vy : Math.random() * vU - (vU / 2),
-    veerx : Math.random() * vQ - (vQ / 2),
-    veery : Math.random() * vQ - (vQ / 2),
-    radius :10 + Math.random() * size,
-    angle : ~~(Math.random() * 360),
-    inc : Math.random() * (Math.PI / 3),
-    lineWidth : Math.random() * line,
-    colors: [],
-  });
+  },
+  create(W, H, vU, vQ, size, line) {
+    return Object.assign(Object.create(this), {
+      x: Math.random() * W,
+      y: Math.random() * H,
+      vx: Math.random() * vU - (vU / 2),
+      vy: Math.random() * vU - (vU / 2),
+      veerx: Math.random() * vQ - (vQ / 2),
+      veery: Math.random() * vQ - (vQ / 2),
+      radius: 10 + Math.random() * size,
+      angle: ~~(Math.random() * 360),
+      inc: Math.random() * (Math.PI / 3),
+      lineWidth: Math.random() * line,
+      colors: [],
+    })
+  },
 };
 export default MathObject

@@ -1,13 +1,5 @@
 import React, { Component } from 'react'
 import { MathObject } from '../objects'
-const _mathobject = () =>{
-  let __private = 'this is private'
-  return Object.assign(Object.create(MathObject), {
-    secret(){
-      return __private
-    }
-  })
-}
 
 class MathArt extends Component {
   constructor(props) {
@@ -17,7 +9,7 @@ class MathArt extends Component {
     }
   }
   componentDidMount() {
-    let canvas = _mathobject()
+    let canvas = MathObject.create()
     canvas.initCanvas()
     canvas._fill('rgba(0,0,0, 1)', 0, 0)
     canvas.start()

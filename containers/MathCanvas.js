@@ -1,8 +1,5 @@
 import React, { Component } from 'react'
 import { volcanoObject } from '../objects'
-const _volcanoObject = () =>{
-  return Object.assign(Object.create(volcanoObject), { })
-}
 class MathCanvas extends Component {
   constructor(props) {
     super(props)
@@ -12,7 +9,7 @@ class MathCanvas extends Component {
   }
 
   componentDidMount() {
-    let myVolcano = _volcanoObject()
+    let myVolcano = volcanoObject.create()
     
     myVolcano.initCanvas()
     myVolcano._fill('rgba(0,0,0, 1)', 0, 0)

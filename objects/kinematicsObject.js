@@ -7,18 +7,18 @@ const Arm = Arm ||{
   angle: 0,
   parent: null,
   color: `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255},${Math.random() })`,
-  create: function (x,y,length, angle) {
+  create (x,y,length, angle) {
     let obj = Object.create(this)
     obj.init(x,y,length, angle)
     return obj
   },
-  init: function(x,y,length, angle){
+  init(x,y,length, angle){
     this.x = x
     this.y = y
     this.length = length
     this.angle = angle
   },
-  getEndX: function(){
+  getEndX(){
     let angle = this.angle, parent = this.parent
     while(parent){
       angle += parent.angle
@@ -27,7 +27,7 @@ const Arm = Arm ||{
     
     return this.x + Math.cos(angle) * this.length
   },
-  getEndY: function(){
+  getEndY(){
     let angle = this.angle, parent = this.parent
     while(parent){
       angle += parent.angle
@@ -35,7 +35,7 @@ const Arm = Arm ||{
     }
     return this.y + Math.sin(angle) * this.length
   },
-  render: function(ctx){
+  render(ctx){
     ctx.strokeStyle = this.color
     ctx.lineWidth = 5
     console.log('render arm', this.getEndX(), this.getEndY(), this)
@@ -48,24 +48,24 @@ const FKSystem = FKSystem || {
   lastArm: null,
   x: 0,
   y: 0,
-  create: function(x,y){
+  create(x,y){
     let obj = Object.create(this)
     obj.init(x,y,)
     return obj
   },
-  init: function(x,y){
+  init(x,y){
     this.x = x
     this.y = y
     this.arms = []
   },
-  addArm: function(length){
+  addArm(length){
     let arm = Arm.create(0,0,length, 0)
     this.arms.push(arm)
     arm.parent = this.lastArm
     this.lastArm = arm
     this.update()
   },
-  update: function(){
+  update(){
     this.arms.forEach(arm =>{
       if (arm.parent){
         arm.x = arm.parent.getEndX()
@@ -76,13 +76,13 @@ const FKSystem = FKSystem || {
       }
     })
   },
-  render: function(ctx){
+  render(ctx){
     this.arms.forEach(arm => arm.render(ctx))
   },
-  rotateArm: function(index, angle){
+  rotateArm(index, angle){
     this.arms[index].angle = angle
   },
-  setArmLength: function(index, length){
+  setArmLength(index, length){
     this.arms[index].length = length
   }
 } 
@@ -271,6 +271,9 @@ export const kinematicsObject = {
     } else{
       this.rainbow.change = 0
     }
+  },
+  create() {
+    return Object.assign(Object.create(this), { })
   },
 }
 export default kinematicsObject

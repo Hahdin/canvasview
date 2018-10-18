@@ -1,9 +1,5 @@
 import React, { Component } from 'react'
 import { transformObject } from '../objects'
-const _transformObject = () =>{
-  return Object.assign(Object.create(transformObject), { })
-}
-
 class Transform extends Component {
   constructor(props) {
     super(props)
@@ -11,9 +7,8 @@ class Transform extends Component {
       canvas: null
     }
   }
-
   componentDidMount() {
-    let _t = _transformObject()
+    let _t = transformObject.create()
     _t.initCanvas()
     _t._fill('rgba(0,0,0, 1)', 0, 0)
     _t.start()

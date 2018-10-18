@@ -1,6 +1,7 @@
 const dat = require('dat.gui');
 import {lib} from '../helpers/'
-export const explosionObject = {
+import parentObject from './parentObject'
+export const explosionChild = {
   innerWidth: 0,
   innerHeight: 0,
   ctx: null,
@@ -62,9 +63,6 @@ export const explosionObject = {
   },
   _fill(color, x, y) {
     lib._fill(this.ctx, color, x, y, this.innerWidth, this.innerHeight)
-  },
-  fade() {
-    lib.cvFade(this.ctx, 'rgba(0,0,0, 0.1)', this.innerWidth, this.innerHeight)
   },
   addGui() {
     let controller = {
@@ -151,7 +149,9 @@ export const explosionObject = {
     }
   },
   create() {
+    let p = parentObject.create()
+    this.fade = p.fade
     return Object.assign(Object.create(this), { })
   },
 }
-export default explosionObject
+export default explosionChild

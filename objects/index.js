@@ -1,5 +1,6 @@
 export * from './mathObject'
 export * from './explosionObject'
+export * from './explosionChild'
 export * from './forestObject'
 export * from './volcanoObject'
 export * from './GOLObject'

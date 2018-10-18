@@ -31,7 +31,7 @@ export const MathObject = {
       drawTime: this.drawTime,
     }
     this.gui.add(controller, 'numOfCircles', 1, 50).step(1).name('Number of circles').onChange((value) => {
-      if (thisf.numOfCircles === value) return
+      if (this.numOfCircles === value) return
       this.numOfCircles = value
       this.initData()
     })

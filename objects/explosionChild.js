@@ -103,7 +103,7 @@ export const explosionChild = {
     }
   },
   create({ ...args }) {
-    return Object.assign(Object.create(this), { ...args })
+    return  Object.assign(Object.assign(Object.create(this), { ...args }), parentObject)
   },
 }
 export default explosionChild

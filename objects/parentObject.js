@@ -28,8 +28,6 @@ export const parentObject ={
   _fill(color, x, y) {
     lib._fill(this.ctx, color, x, y, this.innerWidth, this.innerHeight)
   },
-  addGui() {
-  },
   create({ ...args }) {
     return Object.assign(Object.create(this), { ...args })
   },

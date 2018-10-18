@@ -10,11 +10,12 @@ class LogCanvas extends Component {
   }
   componentDidMount() {
     //let myExplosion = explosionObject.create()
-    let p = Object.create(parentObject)
-    let c = explosionChild.create()
+    //let p = Object.create(parentObject)
+    //let c = explosionChild.create()
+    let myExplosion = explosionChild.create()
 
     //c.initCanvas = null
-    let myExplosion = Object.assign(c, p)
+    //let myExplosion = Object.assign(c, parentObject)
     myExplosion.initCanvas()
     myExplosion._fill('rgba(0,0,0, 1)', 0, 0)
     myExplosion.fade()

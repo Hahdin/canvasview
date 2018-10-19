@@ -1,13 +1,7 @@
 const dat = require('dat.gui');
 import {lib} from '../helpers/'
+import parentObject from './parentObject'
 export const MathObject = {
-  innerWidth: 0,
-  innerHeight: 0,
-  ctx: null,
-  canvas: null,
-  gui: null,
-  drawTimer: null,
-  fadeTimer: null,
   //specific stuff
   circles: [],
   numOfCircles: 31,
@@ -17,9 +11,6 @@ export const MathObject = {
   maxLineWidth: 0.6,
   fadeTime: 5000,
   drawTime: 40,
-  cleanup() {
-    this.gui.destroy()
-  },
   addGui(){
     let controller = {
       numOfCircles: this.numOfCircles,
@@ -67,15 +58,6 @@ export const MathObject = {
   initData(){
     console.log('....init data', this)
     this.createCircles()
-  },
-  initCanvas() {
-    this.canvas = document.getElementById("canvas")
-    this.innerHeight = this.canvas.innerHeight = this.canvas.height = window.innerHeight * 0.9
-    this.innerWidth = this.canvas.innerWidth = this.canvas.width = window.innerWidth * 0.9
-    this.ctx = this.canvas.getContext("2d")
-    this.gui = new dat.GUI({ width: 310 })
-    this.addGui()
-    this.initData()
   },
   draw(){
     this.circles.forEach((circle, i) =>{
@@ -130,16 +112,6 @@ export const MathObject = {
     this.drawTimer = setInterval(() => { this.draw() }, this.drawTime)
     this.fadeTimer = setInterval(() => { this.fade() }, this.fadeTime)
   },
-  stop(){
-    clearInterval(this.fadeTimer)
-    clearInterval(this.drawTimer)
-  },
-  _fill(color, x, y) {
-    lib._fill(this.ctx, color, x, y, this.innerWidth, this.innerHeight)
-  },
-  fade() {
-    lib.cvFade(this.ctx, 'rgba(0,0,0, 0.1)', this.innerWidth, this.innerHeight)
-  },
   createCircles() {
     let count = this.numOfCircles
     this.circles = []
@@ -150,7 +122,7 @@ export const MathObject = {
     }
   },
   create() {
-    return Object.assign(Object.create(this), { })
+    return Object.assign(parentObject.create(), this)
   },
 }
 let circle = {

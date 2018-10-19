@@ -1,13 +1,7 @@
 const dat = require('dat.gui');
 import {lib} from '../helpers/'
+import parentObject from './parentObject'
 export const flockObject = {
-  innerWidth: 0,
-  innerHeight: 0,
-  ctx: null,
-  canvas: null,
-  gui: null,
-  drawTimer: null,
-  fadeTimer: null,
   //specific stuff
   flock: null,
   separationDistance: 50,
@@ -24,9 +18,6 @@ export const flockObject = {
   sizeMax: 2,
   fadeTime: 120,
   showConnections: false,
-  cleanup() {
-    this.gui.destroy()
-  },
   addGui() {
     if (!this.flock)
       return
@@ -153,30 +144,6 @@ export const flockObject = {
     _flock.populateFlock()
     this.flock = _flock
   },
-  // flockFactory(defaults) {
-  //   return Object.assign(Object.create(_Flock), {
-  //     flockSize: this.numberOf,
-  //     center:{
-  //       x: (window.innerWidth * 0.9) / 2,
-  //       y: (window.innerHeight * 0.9) / 2
-  //     },
-  //     defaults,
-  //     boids: [],
-  //     ctx: defaults.ctx,
-  //     showConnections: defaults.showConnections,
-  //     neighborDistance: this.whoIsNeighbor,
-  //     neighborDistanceSquared: this.whoIsNeighbor ** 2,
-  //   })
-  // },
-  initCanvas() {
-    this.canvas = document.getElementById("canvas")
-    this.innerHeight = this.canvas.innerHeight = this.canvas.height = window.innerHeight * 0.9
-    this.innerWidth = this.canvas.innerWidth = this.canvas.width = window.innerWidth * 0.9
-    this.ctx = this.canvas.getContext("2d")
-    this.gui = new dat.GUI({ width: 310 })
-    this.initData()
-    this.addGui() 
-  },
   draw(){
     this.flock.updateFlock()
     let wing = 0.87
@@ -204,18 +171,8 @@ export const flockObject = {
     }, 60)
     this.fadeTimer = setInterval(() => { this.fade() }, this.fadeTime)
   },
-  stop(){
-    clearInterval(this.fadeTimer)
-    clearInterval(this.drawTimer)
-  },
-  _fill(color, x, y) {
-    lib._fill(this.ctx, color, x, y, this.innerWidth, this.innerHeight)
-  },
-  fade() {
-    lib.cvFade(this.ctx, 'rgba(0,0,0, 0.1)', this.innerWidth, this.innerHeight)
-  },
   create() {
-    return Object.assign(Object.create(this), { })
+    return Object.assign(parentObject.create(), this)
   },
 }
 const _Boid = {

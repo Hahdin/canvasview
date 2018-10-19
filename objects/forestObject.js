@@ -1,16 +1,11 @@
 const dat = require('dat.gui');
 import {lib} from '../helpers/'
+import parentObject from './parentObject'
 export const forestObject = {
-  innerWidth: 0,
-  innerHeight: 0,
-  ctx: null,
-  canvas: null,
-  gui: null,
+  //specific stuff
   drawTimer: {
     draw: false,
   },
-  fadeTimer: null,
-  //specific stuff
   _length: 0,
   divergence: 0,
   line_width: 0,
@@ -20,9 +15,6 @@ export const forestObject = {
   max_branches: 32000,
   start_length: 75,
   length_reduction: 0.8,
-  cleanup() {
-    this.gui.destroy()
-  },
   addGui(){
     let controller = {
       max_branches: this.max_branches,
@@ -41,17 +33,6 @@ export const forestObject = {
       if (this.length_reduction === value) return
       this.length_reduction = value
     })
-  },
-  initData(){
-  },
-  initCanvas() {
-    this.canvas = document.getElementById("canvas")
-    this.innerHeight = this.canvas.innerHeight = this.canvas.height = window.innerHeight * 0.9
-    this.innerWidth = this.canvas.innerWidth = this.canvas.width = window.innerWidth * 0.9
-    this.ctx = this.canvas.getContext("2d")
-    this.gui = new dat.GUI({ width: 310 })
-    this.addGui()
-    this.initData()
   },
   draw(){
     if (!this.drawTimer)
@@ -82,12 +63,6 @@ export const forestObject = {
   stop(){
     clearInterval(this.fadeTimer)
     this.drawTimer = null
-  },
-  _fill(color, x, y) {
-    lib._fill(this.ctx, color, x, y, this.innerWidth, this.innerHeight)
-  },
-  fade() {
-    lib.cvFade(this.ctx, 'rgba(0,0,0, 0.1)', this.innerWidth, this.innerHeight)
   },
   drawBranches() {
     let new_start_points = [];
@@ -180,7 +155,7 @@ export const forestObject = {
     return { x: epx, y: epy };
   },
   create() {
-    return Object.assign(Object.create(this), { })
+    return Object.assign(parentObject.create(), this)
   },
 }
 export default forestObject

@@ -1,10 +1,6 @@
 import {lib} from '../helpers/'
+import parentObject from './parentObject'
 export const GOLObject = {
-  innerWidth: 0,
-  innerHeight: 0,
-  ctx: null,
-  canvas: null,
-  drawTimer: null,
   //specific stuff
   grid_size: 0,
   xSize: 0,
@@ -37,13 +33,6 @@ export const GOLObject = {
       let sz = this.grid_size
       lib.drawSphere(this.ctx, {x:(x*sz) -(sz / 2), y:(y*sz) -(sz / 2)}, (sz / 2))
     }
-  },
-  initCanvas() {
-    this.canvas = document.getElementById("canvas")
-    this.innerHeight = this.canvas.innerHeight = this.canvas.height = window.innerHeight * 0.9
-    this.innerWidth = this.canvas.innerWidth = this.canvas.width = window.innerWidth * 0.9
-    this.ctx = this.canvas.getContext("2d")
-    this.initData()
   },
   draw() {
     //check lastMap for who should live/die/be born and update map
@@ -91,12 +80,6 @@ export const GOLObject = {
       this.draw()
     }, 500)
   },
-  stop(){
-    clearInterval(this.drawTimer)
-  },
-  _fill(color, x, y) {
-    lib._fill(this.ctx, color, x, y, this.innerWidth, this.innerHeight)
-  },
     /**
    * Any live cell with fewer than two live neighbors dies, as if by under population.
    * Any live cell with two or three live neighbors lives on to the next generation.
@@ -126,7 +109,7 @@ export const GOLObject = {
     return count
   },
   create() {
-    return Object.assign(Object.create(this), { })
+    return Object.assign(parentObject.create(), this)
   },
 }
 export default GOLObject

@@ -1,13 +1,7 @@
 const dat = require('dat.gui');
 import {lib} from '../helpers/'
+import parentObject from './parentObject'
 export const rotationObject = {
-  innerWidth: 0,
-  innerHeight: 0,
-  ctx: null,
-  canvas: null,
-  gui: null,
-  drawTimer: null,
-  fadeTimer: null,
   //specific stuff
   angle: 0.005,
   xRot: {
@@ -115,24 +109,10 @@ export const rotationObject = {
     this.innerWidth = this.canvas.innerWidth = this.canvas.width = window.innerWidth * 0.9
     this.ctx = this.canvas.getContext("2d")
     this.gui = new dat.GUI({ width: 310 })
-    this.ctx.translate(this.innerWidth / 2, this.innerHeight / 2)
+    this.ctx.translate(this.innerWidth / 2, this.innerHeight / 2)//not in parent
     this.addGui()
     this.initData()
   },
-  // draw(){
-  //   this.rotate(this.xAxis)
-  //   this.rotate(this.yAxis)
-  //   this.rotate(this.zAxis)
-  //   this.ctx.fillStyle = this.ctx.strokeStyle = 'red'
-  //   lib.lineTo(this.ctx, 0, 0, this.xAxis.x, this.xAxis.y)
-  //   lib.drawSphere(this.ctx, {x:this.xAxis.x, y:this.xAxis.y}, 5)
-  //   this.ctx.fillStyle = this.ctx.strokeStyle = 'green'
-  //   lib.lineTo(this.ctx, 0, 0, this.yAxis.x, this.yAxis.y)
-  //   lib.drawSphere(this.ctx, {x:this.yAxis.x, y:this.yAxis.y}, 5)
-  //   this.ctx.fillStyle = this.ctx.strokeStyle = 'blue'
-  //   lib.lineTo(this.ctx, 0, 0, this.zAxis.x, this.zAxis.y)
-  //   lib.drawSphere(this.ctx, {x:this.zAxis.x, y:this.zAxis.y}, 5)
-  // },
   start() {
     this.drawTimer = setInterval(() => {
       let count = this.count
@@ -141,10 +121,6 @@ export const rotationObject = {
         this.fade('rgb(0,0,0,0.1')
       }
     }, 60)
-  },
-  stop(){
-    clearInterval(this.fadeTimer)
-    clearInterval(this.drawTimer)
   },
   _fill(color, x, y) {
     this.ctx.fillStyle = color
@@ -226,7 +202,7 @@ export const rotationObject = {
     })
   },
   create() {
-    return Object.assign(Object.create(this), { })
+    return Object.assign(parentObject.create(), this)
   },
 }
 export default rotationObject

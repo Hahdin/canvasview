@@ -1,13 +1,7 @@
 const dat = require('dat.gui');
 import {lib} from '../helpers/'
+import parentObject from './parentObject'
 export const volcanoObject = {
-  innerWidth: 0,
-  innerHeight: 0,
-  ctx: null,
-  canvas: null,
-  gui: null,
-  drawTimer: null,
-  fadeTimer: null,
   //specific stuff
   circles: [],
   projectiles: [],
@@ -26,9 +20,6 @@ export const volcanoObject = {
   showFireworks: true,
   bounceVelRatio: 0.3,
   solid: true,
-  cleanup() {
-    this.gui.destroy()
-  },
   addGui(){
     let controller = {
       projectileSize: this.projectileSize,
@@ -89,8 +80,6 @@ export const volcanoObject = {
     this.mouse.y = this.innerHeight / 10;
   },
 
-  initData(){
-  },
   initCanvas() {
     this.canvas = document.getElementById("canvas")
     this.innerHeight = this.canvas.innerHeight = this.canvas.height = window.innerHeight * 0.9
@@ -111,16 +100,6 @@ export const volcanoObject = {
       this.drawParticles()
     }, 60)
     this.fadeTimer = setInterval(() => { this.fade() }, 400)
-  },
-  stop(){
-    clearInterval(this.fadeTimer)
-    clearInterval(this.drawTimer)
-  },
-  _fill(color, x, y) {
-    lib._fill(this.ctx, color, x, y, this.innerWidth, this.innerHeight)
-  },
-  fade() {
-    lib.cvFade(this.ctx, 'rgba(0,0,0, 0.1)', this.innerWidth, this.innerHeight)
   },
   bounce(projectile) {
     if (projectile.yPos > this.innerHeight - 5) {
@@ -273,8 +252,6 @@ export const volcanoObject = {
       }
     }
   },
-  
-
   explode() {
     //let sparkle = Math.random() > 50 ? true : false
     this.particles.forEach((pt, i) => {
@@ -391,7 +368,7 @@ export const volcanoObject = {
     })
   },
   create() {
-    return Object.assign(Object.create(this), { })
+    return Object.assign(parentObject.create(), this)
   },
 }
 export default volcanoObject

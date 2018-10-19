@@ -1,70 +1,18 @@
-const dat = require('dat.gui');
 import {lib} from '../helpers/'
+import parentObject from './parentObject'
 export const explosionObject = {
-  innerWidth: 0,
-  innerHeight: 0,
-  ctx: null,
-  canvas: null,
-  gui: null,
-  drawTimer: null,
-  fadeTimer: null,
   //specific stuff
   explosions: [],
   particles: [],
   gravity: 0.3,
   velocity: 10,
   density: 10,
-  cleanup() {
-    this.gui.destroy()
-  },
-  initCanvas() {
-    this.canvas = document.getElementById("canvas")
-    this.innerHeight = this.canvas.innerHeight = this.canvas.height = window.innerHeight * 0.9
-    this.innerWidth = this.canvas.innerWidth = this.canvas.width = window.innerWidth * 0.9
-    this.ctx = this.canvas.getContext("2d")
-    this.gui = new dat.GUI({ width: 310 })
-    this.addGui()
-    this.initData()
-
-
-    //a test
-    const Parent = {
-      msg: '',
-      parentMethod() {
-        return null
-      },
-      create({ ...args }) {
-        return Object.assign(Object.create(this), { ...args })
-      },
-    }
-    
-    const Child = {
-      create({ ...args }) {
-        return Object.assign(Object.create(this), { ...args })
-      },
-    }
-    
-    let _parent = Parent.create({msg:'testing', parentMethod(){return this.msg}})
-    let _child = Child.create(_parent)
-    console.log('###',_child.parentMethod())
-    
-  },
   start() {
     this.fadeTimer = setInterval(() => { this.fade() }, 200)
     this.drawTimer = setInterval(() =>{
       this.drawExplosions()
       this.drawParticles()
     }, 60)
-  },
-  stop() {
-    clearInterval(this.fadeTimer)
-    clearInterval(this.drawTimer)
-  },
-  _fill(color, x, y) {
-    lib._fill(this.ctx, color, x, y, this.innerWidth, this.innerHeight)
-  },
-  fade() {
-    lib.cvFade(this.ctx, 'rgba(0,0,0, 0.1)', this.innerWidth, this.innerHeight)
   },
   addGui() {
     let controller = {
@@ -151,7 +99,7 @@ export const explosionObject = {
     }
   },
   create() {
-    return Object.assign(Object.create(this), { })
+    return Object.assign(parentObject.create(), this)
   },
 }
 export default explosionObject

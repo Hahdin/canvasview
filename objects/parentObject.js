@@ -8,6 +8,9 @@ export const parentObject ={
   gui: null,
   drawTimer: null,
   fadeTimer: null,
+  cleanup() {
+    this.gui.destroy()
+  },
   fade() {
     console.log('parent fade')
     lib.cvFade(this.ctx, 'rgba(0,0,0, 0.1)', this.innerWidth, this.innerHeight)
@@ -18,8 +21,8 @@ export const parentObject ={
     this.innerWidth = this.canvas.innerWidth = this.canvas.width = window.innerWidth * 0.9
     this.ctx = this.canvas.getContext("2d")
     this.gui = new dat.GUI({ width: 310 })
-    this.addGui()
     this.initData()
+    this.addGui()
   },
   stop() {
     clearInterval(this.fadeTimer)
@@ -30,6 +33,12 @@ export const parentObject ={
   },
   create({ ...args }) {
     return Object.assign(Object.create(this), { ...args })
+  },
+  addGui(){
+    console.log('parent, should not be called')
+  },
+  initData(){
+    console.log('parent, should not be called')
   },
 
 }

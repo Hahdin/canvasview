@@ -1,18 +1,10 @@
 const dat = require('dat.gui');
 import { lib } from '../helpers/'
 let cc = 0
-
+import parentObject from './parentObject'
 export const transformObject = {
-  innerWidth: 0,
-  innerHeight: 0,
-  ctx: null,
-  canvas: null,
-  gui: null,
-  drawTimer: null,
-  fadeTimer: null,
   redraw: false,
   rules: [{
-
     //  index: 0,
     a: .85,//# of leaves
     b: 0.04,//tilt right
@@ -60,10 +52,6 @@ export const transformObject = {
     color: `rgba(255,255,${cc}, 1)`,
     getColor: () => `rgba(${Math.random() * 255},${Math.random() * 255},${cc}, 1)`
   }],
-  //specific stuff
-  cleanup() {
-    this.gui.destroy()
-  },
   addGui() {
     let controller = {}
     this.rules.forEach((rule, i) => {
@@ -106,8 +94,6 @@ export const transformObject = {
       })
     })
   },
-  initData() {
-  },
   initCanvas() {
     this.canvas = document.getElementById("canvas")
     this.innerHeight = this.canvas.innerHeight = this.canvas.height = window.innerHeight * 0.9
@@ -123,10 +109,6 @@ export const transformObject = {
   },
   start() {
     this.drawTimer = setInterval(() => { this.draw() }, 200)
-  },
-  stop() {
-    clearInterval(this.fadeTimer)
-    clearInterval(this.drawTimer)
   },
   _fill(color, x, y) {
     this.ctx.fillStyle = color
@@ -169,7 +151,7 @@ export const transformObject = {
     }
   },
   create() {
-    return Object.assign(Object.create(this), { })
+    return Object.assign(parentObject.create(), this)
   },
 }
 export default transformObject

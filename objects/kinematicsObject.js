@@ -1,5 +1,6 @@
 const dat = require('dat.gui');
 import {lib} from '../helpers/'
+import parentObject from './parentObject'
 const Arm = Arm ||{
   x:0,
   y: 0,
@@ -88,13 +89,6 @@ const FKSystem = FKSystem || {
 } 
 
 export const kinematicsObject = {
-  innerWidth: 0,
-  innerHeight: 0,
-  ctx: null,
-  canvas: null,
-  gui: null,
-  drawTimer: null,
-  fadeTimer: null,
   //specific stuff
   fk: null,
   arms: [],
@@ -122,9 +116,6 @@ export const kinematicsObject = {
   colorChange: 0.2,
   lineWidth: 0.1,
   opacity: 0.5,
-  cleanup() {
-    this.gui.destroy()
-  },
   addGui(){
     let controller = {
       mod1: this.mod1,
@@ -192,15 +183,6 @@ export const kinematicsObject = {
     this.fk.addArm(this.arm2Length)
     this.fk.addArm(this.arm3Length)
   },
-  initCanvas() {
-    this.canvas = document.getElementById("canvas")
-    this.innerHeight = this.canvas.innerHeight = this.canvas.height = window.innerHeight * 0.9
-    this.innerWidth = this.canvas.innerWidth = this.canvas.width = window.innerWidth * 0.9
-    this.ctx = this.canvas.getContext("2d")
-    this.gui = new dat.GUI({ width: 310 })
-    this.addGui()
-    this.initData()
-  },
   draw(){
     this.updateRainbow()
     this.ctx.strokeStyle = `rgba(${this.rainbow.r},${this.rainbow.g},${this.rainbow.b},${this.opacity})`
@@ -228,16 +210,6 @@ export const kinematicsObject = {
         this.draw()
       }
     }, this.animationSpeed)
-  },
-  stop(){
-    clearInterval(this.fadeTimer)
-    clearInterval(this.drawTimer)
-  },
-  _fill(color, x, y) {
-    lib._fill(this.ctx, color, x, y, this.innerWidth, this.innerHeight)
-  },
-  fade() {
-    lib.cvFade(this.ctx, 'rgba(0,0,0, 0.1)', this.innerWidth, this.innerHeight)
   },
   updateRainbow(){
     let change = this.colorChange
@@ -273,7 +245,7 @@ export const kinematicsObject = {
     }
   },
   create() {
-    return Object.assign(Object.create(this), { })
+    return Object.assign(parentObject.create(), this)
   },
 }
 export default kinematicsObject

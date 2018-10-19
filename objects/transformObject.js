@@ -4,54 +4,57 @@ let cc = 0
 import parentObject from './parentObject'
 export const transformObject = {
   redraw: false,
-  rules: [{
-    //  index: 0,
-    a: .85,//# of leaves
-    b: 0.04,//tilt right
-    c: -0.04,//curve to right
-    d: 0.85,//height? lower to squash
-    tx: 0,//x offset
-    ty: 1.6,//expand / grow
-    weight: 0.85,
-    color: `rgba(${cc},255,${cc}, 1)`,
-    getColor: () => `rgba(${cc},${Math.random() * 255},${cc},1)`
+  rules: [],
+  initData() {
+    this.rules = [{
+      //  index: 0,
+      a: .85,//# of leaves
+      b: 0.04,//tilt right
+      c: -0.04,//curve to right
+      d: 0.85,//height? lower to squash
+      tx: 0,//x offset
+      ty: 1.6,//expand / grow
+      weight: 0.85,
+      color: `rgba(${cc},255,${cc}, 1)`,
+      getColor: () => `rgba(${cc},${Math.random() * 255},${cc},1)`
+    },
+    {//right 
+      //  index: 1,
+      a: -0.15,
+      b: 0.28,
+      c: 0.26,
+      d: 0.24,
+      tx: 0,
+      ty: 0.44,
+      weight: 0.07,
+      color: `rgba(255,${cc},${cc}, 1)`,
+      getColor: () => `rgba(${Math.random() * 255}, ${cc},${cc}, 1)`
+    },
+    {//left 
+      // index: 2,
+      a: 0.2,
+      b: -0.26,
+      c: 0.23,
+      d: 0.22,
+      tx: 0,
+      ty: 1.6,
+      weight: 0.07,
+      color: `rgba(${cc},${cc},255, 1)`,
+      getColor: () => `rgba(${Math.random() * 255},${cc},${Math.random() * 255}, 1)`
+    },
+    {
+      // index: 3,
+      a: 0,
+      b: 0,
+      c: 0,
+      d: 0.16,
+      tx: 0,
+      ty: 0,
+      weight: 0.1,
+      color: `rgba(255,255,${cc}, 1)`,
+      getColor: () => `rgba(${Math.random() * 255},${Math.random() * 255},${cc}, 1)`
+    }]
   },
-  {//right 
-    //  index: 1,
-    a: -0.15,
-    b: 0.28,
-    c: 0.26,
-    d: 0.24,
-    tx: 0,
-    ty: 0.44,
-    weight: 0.07,
-    color: `rgba(255,${cc},${cc}, 1)`,
-    getColor: () => `rgba(${Math.random() * 255}, ${cc},${cc}, 1)`
-  },
-  {//left 
-    // index: 2,
-    a: 0.2,
-    b: -0.26,
-    c: 0.23,
-    d: 0.22,
-    tx: 0,
-    ty: 1.6,
-    weight: 0.07,
-    color: `rgba(${cc},${cc},255, 1)`,
-    getColor: () => `rgba(${Math.random() * 255},${cc},${Math.random() * 255}, 1)`
-  },
-  {
-    // index: 3,
-    a: 0,
-    b: 0,
-    c: 0,
-    d: 0.16,
-    tx: 0,
-    ty: 0,
-    weight: 0.1,
-    color: `rgba(255,255,${cc}, 1)`,
-    getColor: () => `rgba(${Math.random() * 255},${Math.random() * 255},${cc}, 1)`
-  }],
   addGui() {
     let controller = {}
     this.rules.forEach((rule, i) => {
@@ -101,8 +104,8 @@ export const transformObject = {
     this.ctx = this.canvas.getContext("2d")
     this.gui = new dat.GUI({ width: 310 })
     this.ctx.translate(this.innerWidth / 2, this.innerHeight)
-    this.addGui()
     this.initData()
+    this.addGui()
   },
   draw() {
     this.iterate()

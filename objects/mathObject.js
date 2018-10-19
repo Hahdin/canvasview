@@ -1,4 +1,3 @@
-const dat = require('dat.gui');
 import {lib} from '../helpers/'
 import parentObject from './parentObject'
 export const MathObject = {

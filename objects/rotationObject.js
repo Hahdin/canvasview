@@ -110,8 +110,8 @@ export const rotationObject = {
     this.ctx = this.canvas.getContext("2d")
     this.gui = new dat.GUI({ width: 310 })
     this.ctx.translate(this.innerWidth / 2, this.innerHeight / 2)//not in parent
-    this.addGui()
     this.initData()
+    this.addGui()
   },
   start() {
     this.drawTimer = setInterval(() => {
@@ -186,7 +186,6 @@ export const rotationObject = {
     this.rotateArray(this.random_array)
     this.ctx.lineWidth = this.rand_line
     this.random_array.forEach(point =>{
-      let rand = Math.random()
       this.ctx.fillStyle = this.ctx.strokeStyle = point.clr
       let radPct = Math.abs(point.z / this.rand_spread )
       let rad = this.rand_spread / 25 

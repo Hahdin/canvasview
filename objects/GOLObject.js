@@ -7,8 +7,6 @@ export const GOLObject = {
   ySize: 0,
   map: [],
   lastMap: [],
-  cleanup() {
-  },
   initData(){
     this.grid_size = 20
     this.xSize = Math.round((this.innerWidth ) / this.grid_size)

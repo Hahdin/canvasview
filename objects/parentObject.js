@@ -12,7 +12,6 @@ export const parentObject ={
     this.gui.destroy()
   },
   fade() {
-    console.log('parent fade')
     lib.cvFade(this.ctx, 'rgba(0,0,0, 0.1)', this.innerWidth, this.innerHeight)
   },
   initCanvas() {

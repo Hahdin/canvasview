@@ -25,7 +25,7 @@ coverage
 
 # node-waf configuration
 .lock-wscript
-tests/*.*
+tests/*.js
 # Compiled binary addons (http://nodejs.org/api/addons.html)
 build/Release
 dist/mybundle.js
@@ -42,3 +42,4 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
+scrap.js

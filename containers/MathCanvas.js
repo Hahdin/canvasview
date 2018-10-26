@@ -17,9 +17,9 @@ class MathCanvas extends Component {
     this.state.volcano = myVolcano
   }
   componentWillUnmount(){
-    console.log('unmount LogCanvas')
     this.state.volcano.cleanup()
     this.state.volcano.stop()
+    this.state.volcano = {}
   }
   render() {
     return (<div />)

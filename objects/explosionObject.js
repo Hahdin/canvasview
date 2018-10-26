@@ -93,6 +93,8 @@ export const explosionObject = {
     })
   },
   initData() {
+    this.explosions = []
+    this.particles =[]
     let count = 1
     while (count--) {
       this.explosions.push(this.createExplosion({ x: this.innerWidth / 2, y: this.innerHeight / 2 }))

@@ -81,9 +81,10 @@ export const volcanoObject = {
   },
 
   initCanvas() {
-    this.circles =  []
-    this.projectiles =  []
-    this.particles =  []
+    this.circles = []
+    this.projectiles = []
+    this.fireWorks = []
+    this.particles = []
     this.canvas = document.getElementById("canvas")
     this.innerHeight = this.canvas.innerHeight = this.canvas.height = window.innerHeight * 0.9
     this.innerWidth = this.canvas.innerWidth = this.canvas.width = window.innerWidth * 0.9
@@ -372,7 +373,7 @@ export const volcanoObject = {
     })
   },
   create() {
-    return Object.assign(parentObject.create(), this)
+    return Object.assign(parentObject.create(), {...this})
   },
 }
 export default volcanoObject

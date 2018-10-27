@@ -45,6 +45,9 @@ export const MyNavBar = ({ ...props }) => {
           <LinkContainer to="/mathart">
             <NavItem eventKey={9}  > Math Art </NavItem>
           </LinkContainer>
+          <LinkContainer to="/world">
+            <NavItem eventKey={9}  > World </NavItem>
+          </LinkContainer>
         </Nav>
         <Navbar.Text pullRight style={{ fontSize: '12px', marginRight: '10px' }}>
           {'BlackToque ©'}

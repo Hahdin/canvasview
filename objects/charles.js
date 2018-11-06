@@ -317,7 +317,7 @@ export const charles = {
     //   this.hungry = 0
   },
   create() {
-    return Object.assign(parentObject.create(), this)
+    return Object.assign({},parentObject, this)
   },
   start() {
     this.drawTimer = setInterval(() => {

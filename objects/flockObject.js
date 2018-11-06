@@ -172,7 +172,7 @@ export const flockObject = {
     this.fadeTimer = setInterval(() => { this.fade() }, this.fadeTime)
   },
   create() {
-    return Object.assign(parentObject.create(), this)
+    return Object.assign({},parentObject, this)
   },
 }
 const _Boid = {

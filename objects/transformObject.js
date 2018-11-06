@@ -154,7 +154,7 @@ export const transformObject = {
     }
   },
   create() {
-    return Object.assign(parentObject.create(), this)
+    return Object.assign({},parentObject, this)
   },
 }
 export default transformObject

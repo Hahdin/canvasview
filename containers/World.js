@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { charles } from '../objects'
+import { WorldObject } from '../objects'
 export class World extends Component { 
   constructor(props) {
     super(props)
@@ -8,7 +9,9 @@ export class World extends Component {
     }
   }
   componentDidMount() {
-    let canvas = charles.create()
+    //let canvas = charles.create()
+    let canvas = WorldObject.create()
+    
     canvas.initCanvas()
     canvas._fill('rgba(0,0,0, 1)', 0, 0)
     canvas.start()

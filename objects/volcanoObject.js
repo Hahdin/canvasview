@@ -372,7 +372,7 @@ export const volcanoObject = {
     })
   },
   create() {
-    return Object.assign(parentObject.create(), this)
+    return Object.assign({},parentObject, this)
   },
 }
 export default volcanoObject

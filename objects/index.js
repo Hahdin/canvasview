@@ -9,5 +9,8 @@ export * from './transformObject'
 export * from './flockObject'
 export * from './parentObject'
 export * from './charles'
+export * from './searchBot'
+export * from './searchBots'
+export * from './world'
 
 

@@ -37,9 +37,48 @@ export const lib = {
     let c2 = `rgba(${255 - r},${255 - g},${255 - b},${a} )`
     return { c1, c2 }
   },
+  getRgb:() =>{
+    return `rgb(${Math.round(Math.random() * 255)},  
+    ${Math.round(Math.random() * 255)},  
+    ${Math.round(Math.random() * 255)})`
+  },
   _fill: (ctx,color, x, y, width, height) =>{
     ctx.fillStyle = color
     ctx.fillRect(x, y, width, height)
+  },
+  normalizeVector(vector){
+    let mag = Math.abs(Math.sqrt((vector.x ** 2) + (vector.y ** 2)))
+    mag = mag === 0 ? 1 : mag
+    return {
+      x: vector.x / mag,
+      y: vector.y / mag,
+    }
+  },
+  getVector(from, to) {
+    let diffX = to.x - from.x
+    let diffY = to.y - from.y
+    let mag = Math.abs(Math.sqrt((diffX ** 2) + (diffY ** 2)))
+    mag = mag === 0 ? 1 : mag
+    let normalized = {
+      x: diffX / mag,
+      y: diffY / mag,
+    }
+    return normalized
+
+  },
+  getDistance(posA, posB){
+    return Math.abs(Math.sqrt(((posA.x - posB.x) ** 2) + ((posA.y - posB.y) ** 2)))
+  },
+  intersects(a, b, c, d, p, q, r, s) {
+    var det, gamma, lambda;
+    det = (c - a) * (s - q) - (r - p) * (d - b);
+    if (det === 0) {
+      return false;
+    } else {
+      lambda = ((s - q) * (r - a) + (p - r) * (s - b)) / det;
+      gamma = ((b - d) * (r - a) + (c - a) * (s - b)) / det;
+      return (0 < lambda && lambda < 1) && (0 < gamma && gamma < 1);
+    }
   },
 }
 export default lib

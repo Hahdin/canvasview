@@ -101,7 +101,7 @@ export const explosionObject = {
     }
   },
   create() {
-    return Object.assign({},parentObject, this)
+    return  {...parentObject, ...this}
   },
 }
 export default explosionObject

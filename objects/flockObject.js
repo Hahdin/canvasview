@@ -172,7 +172,7 @@ export const flockObject = {
     this.fadeTimer = setInterval(() => { this.fade() }, this.fadeTime)
   },
   create() {
-    return Object.assign({},parentObject, this)
+    return  {...parentObject, ...this}
   },
 }
 const _Boid = {
@@ -331,7 +331,7 @@ const _Boid = {
     this.acceleration = { x: 0, y: 0 };
   },
   create({...args}) {
-    return Object.assign(Object.create(this), {...args })
+    return  {...this, ...args}
   },
 }
 const _Flock ={
@@ -406,7 +406,7 @@ const _Flock ={
     })
   },
   create({...args}) {
-    return Object.assign(Object.create(this), {...args })
+    return  {...this, ...args}
   },
 }
 export default flockObject

@@ -219,7 +219,7 @@ export const searchBot = {
     this.move()
   },
   create(W, H, circles, pos, id) {
-    return Object.assign(Object.create(this), {
+    return {...this, 
       pos: {
         x: pos.x,
         y: pos.y,
@@ -245,7 +245,7 @@ export const searchBot = {
       color: `rgb(${Math.round(Math.random() * 255)},  
       ${Math.round(Math.random() * 255)},  
       ${Math.round(Math.random() * 255)})`,
-    })
+    }
   },
 }
 export default searchBot

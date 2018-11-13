@@ -154,7 +154,7 @@ export const forestObject = {
     return { x: epx, y: epy };
   },
   create() {
-    return Object.assign({},parentObject, this)
+    return  {...parentObject, ...this}
   },
 }
 export default forestObject

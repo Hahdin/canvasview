@@ -8,7 +8,7 @@ const Arm = Arm ||{
   parent: null,
   color: `rgba(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255},${Math.random() })`,
   create (x,y,length, angle) {
-    let obj = Object.create(this)
+    let obj = {...this}
     obj.init(x,y,length, angle)
     return obj
   },
@@ -49,7 +49,7 @@ const FKSystem = FKSystem || {
   x: 0,
   y: 0,
   create(x,y){
-    let obj = Object.create(this)
+    let obj = {...this}
     obj.init(x,y,)
     return obj
   },
@@ -244,7 +244,7 @@ export const kinematicsObject = {
     }
   },
   create() {
-    return Object.assign({},parentObject, this)
+    return  {...parentObject, ...this}
   },
 }
 export default kinematicsObject

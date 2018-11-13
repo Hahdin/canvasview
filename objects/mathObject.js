@@ -121,7 +121,7 @@ export const MathObject = {
     }
   },
   create() {
-    return Object.assign({},parentObject, this)
+    return  {...parentObject, ...this}
   },
 }
 let circle = {
@@ -143,8 +143,7 @@ let circle = {
     }
   },
   create(W, H, vU, vQ, size, line) {
-    //return Object.assign(Object.create(this), {
-    return Object.assign({},this, {
+    return {...this, 
       x: Math.random() * W,
       y: Math.random() * H,
       vx: Math.random() * vU - (vU / 2),
@@ -156,7 +155,7 @@ let circle = {
       inc: Math.random() * (Math.PI / 3),
       lineWidth: Math.random() * line,
       colors: [],
-    })
+    }
   },
 };
 export default MathObject

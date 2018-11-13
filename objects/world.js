@@ -15,7 +15,7 @@ export const WorldObject = {
   indexOfShortestPath: -1,
   optimizedPath: null,
   create() {
-    return Object.assign({}, parentObject, this)
+    return  {...parentObject, ...this}
   },
   initData() {
     let count = 1500

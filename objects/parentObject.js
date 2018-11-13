@@ -31,7 +31,8 @@ export const parentObject ={
     lib._fill(this.ctx, color, x, y, this.innerWidth, this.innerHeight)
   },
   create({ ...args }) {
-    return Object.assign(Object.create(this), { ...args })
+    return {...this,  ...args }
+    //return Object.assign(Object.create(this), { ...args })
   },
   addGui(){
     console.log('parent, should not be called')

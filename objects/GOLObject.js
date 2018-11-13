@@ -107,7 +107,7 @@ export const GOLObject = {
     return count
   },
   create() {
-    return Object.assign({},parentObject, this)
+    return  {...parentObject, ...this}
   },
 }
 export default GOLObject

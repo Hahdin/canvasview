@@ -32,7 +32,7 @@ export const turtle = {
 
   },
   create(W, H, circles, pos, id) {
-    return Object.assign(Object.create(this), {
+    return {...this, 
       pos: {
         x: pos.x,
         y: pos.y,
@@ -43,7 +43,7 @@ export const turtle = {
         height: H,
         objects: circles,
       }
-    })
+    }
   },
 }
 

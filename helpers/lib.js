@@ -1,14 +1,22 @@
 export const lib = {
-  drawSphere: (ctx, point, radius) =>{
+  drawSphere: (ctx, point, radius, fill = true, stroke = true) =>{
       ctx.beginPath()
       ctx.arc(point.x, point.y, radius, Math.PI * 2, false)
-      ctx.fill();
+      if (fill) ctx.fill()
+      if (stroke) ctx.stroke()
   },
   lineTo : (ctx, x1,y1, x2, y2) =>{
     ctx.beginPath()
     ctx.moveTo(x1, y1)
     ctx.lineTo(x2, y2)
     ctx.stroke()
+  },
+  drawRect(ctx, x, y, w, h, fill = true, stroke = true){
+    ctx.beginPath()
+
+    //ctx.drawRect(x,y,w,h)
+    if ( fill) ctx.fillRect(x-w/2, y-h/2, w, h)
+    if ( stroke) ctx.strokeRect(x-w/2, y-h/2, w, h)
   },
   cvFade: (ctx, color, w, h) => {
     let old = ctx.shadowColor
@@ -37,6 +45,26 @@ export const lib = {
     let c2 = `rgba(${255 - r},${255 - g},${255 - b},${a} )`
     return { c1, c2 }
   },
+  getRainbow: (c, op)=> {
+    //roygbv
+    let inc = 0.142857
+    return c < inc ? `rgba(${255},${0},${0},${op})` :
+      c < inc * 2 ? `rgba(${255},${128},${0},${op})` :
+        c < inc * 3 ? `rgba(${255},${255},${0},${op})` :
+          c < inc * 4 ? `rgba(${0},${255},${0},${op})` :
+            c < inc * 6 ? `rgba(${0},${128},${255},${op})` : `rgba(${255},${0},${255},${op})`
+
+  },
+
+  getRandomColor(op) {
+    return `rgba(${255 * Math.random()},${255 * Math.random()},${255 * Math.random()},${op})`
+  },
+  calcGravity(dist, gravity, radius) {
+    //let sg = 9.80665
+    //let er = 6371.008
+    return gravity * ((radius / (radius + dist)) ** 2)
+  },
+
   getRgb:() =>{
     return `rgb(${Math.round(Math.random() * 255)},  
     ${Math.round(Math.random() * 255)},  
@@ -67,6 +95,10 @@ export const lib = {
 
   },
   getDistance(posA, posB){
+    if (!posA || !posB){
+      console.log('fail')
+      return
+    }
     return Math.abs(Math.sqrt(((posA.x - posB.x) ** 2) + ((posA.y - posB.y) ** 2)))
   },
   intersects(a, b, c, d, p, q, r, s) {
@@ -80,6 +112,16 @@ export const lib = {
       return (0 < lambda && lambda < 1) && (0 < gamma && gamma < 1);
     }
   },
+  getTopLeftCanvas (canvas) {
+    let dom = canvas
+    let domP = dom.offsetParent
+    return {
+      top: dom.offsetTop + domP.offsetTop + domP.clientTop - window.scrollY,
+      left: dom.offsetLeft + domP.offsetLeft + domP.clientLeft - window.scrollX
+    }
+  }
 }
+
+
 export default lib
 

@@ -13,6 +13,7 @@ import { history } from '../helpers'
 import { MyNavBar } from '../components/MyNavBar';
 import { HomePage } from '../components/HomePage';
 import { World } from '../containers/World';
+import { Turb } from '../containers/Turb';
 
 // class App extends Component {
 //   constructor(props) {
@@ -68,6 +69,7 @@ export const App = ({ ...props }) => {
             <Route path={`${path}connect`} component={Connections} />
             <Route path={`${path}mathart`} component={MathArt} />
             <Route path={`${path}world`} component={World} />
+            <Route path={`${path}fluid`} component={Turb} />
             
           </div>
         </Router>

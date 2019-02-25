@@ -33,6 +33,7 @@ import { lib } from '../helpers';
 export const navier = {
   particles: [],
   drawTime: 60,
+  fadeTime: 60,
   settings: {
     resolution: 64,
     fract: 1 / 4,
@@ -60,8 +61,10 @@ export const navier = {
   particleCount: 1000,
   particleSize: 3,
   maxVelocity: 8,
+  showTrace: false,
   addGui() {
     let controller = {
+      showTrace: this.showTrace,
       showVectors: this.showVectors,
       showDensities: this.showDensities,
       showParticles: this.showParticles,
@@ -70,6 +73,11 @@ export const navier = {
       maxVelocity: this.maxVelocity,
       setFieldVectors: () =>{this.setFieldVectors()},
     }
+    this.gui.add(controller, 'showTrace', 0, 1).name('Show Trace').onChange((value) => {
+      if (this.showTrace === value) return
+      this.showTrace = value
+      this.setTrace()
+    })
     this.gui.add(controller, 'showVectors', 0, 1).name('Show VectorMap').onChange((value) => {
       if (this.showVectors === value) return
       this.showVectors = value
@@ -99,6 +107,17 @@ export const navier = {
       this.setFieldVectors()
       console.log('test')
     })
+  },
+  setTrace(){
+    if (!this.showTrace){
+      if (this.fadeTimer){
+        clearInterval(this.fadeTimer)
+        this.fadeTimer = null
+      }
+    } else{
+      this.fadeTimer = setInterval(() => { this.fade() }, this.fadeTime)
+    }
+
   },
   initCanvas() {
     this.canvas = document.getElementById("canvas")
@@ -223,12 +242,6 @@ export const navier = {
     let xInc = this.innerWidth / this.rows
     let yInc = this.innerHeight / this.rows
     let ri = this.rows
-    let xi = (this.mouse.x / xInc) << 0
-    let yi = (this.mouse.y / yInc) << 0
-    // let V = this.vectormaps.V[xi + yi * ri]//y
-    // let U = this.vectormaps.U[xi + yi * ri]
-    // let to = { x: this.mouse.x - this.mouse.lx, y: this.mouse.y - this.mouse.ly }
-    // let vec = lib.normalizeVector({ x: this.mouse.x - this.mouse.lx, y: this.mouse.y - this.mouse.ly })
     let mouseChanges = { dx: this.mouse.x - this.mouse.lx, dy: this.mouse.y - this.mouse.ly }
     if (mouseChanges.dx !== 0 || mouseChanges.dy !== 0) {
       let length = (Math.sqrt(mouseChanges.dx * mouseChanges.dx + mouseChanges.dy * mouseChanges.dy) + 0.5) | 0
@@ -330,8 +343,10 @@ export const navier = {
     }
   },
   draw() {
-    this.ctx.fillStyle = 'black'
-    lib.drawRect(this.ctx, 0, 0, this.innerWidth * 2, this.innerHeight * 2, true, false)
+    if (!this.showTrace){
+      this.ctx.fillStyle = 'black'
+      lib.drawRect(this.ctx, 0, 0, this.innerWidth * 2, this.innerHeight * 2, true, false)
+    }
     this.vel_step(this.vectormaps.U, this.vectormaps.V, this.vectormaps.U_prev, this.vectormaps.V_prev, this.settings.dt)
     this.dens_step(this.vectormaps.D, this.vectormaps.D_prev, this.vectormaps.U, this.vectormaps.V, this.settings.dt)
     //only do one type
@@ -379,8 +394,11 @@ export const navier = {
       this.ctx.strokeStyle = `rgba(${color}, ${255 - dcolor}, ${255 - color}, ${1})`
       let sz = this.particleSize
       this.ctx.lineWidth = sz
+      let rr = (particle.pos.y - particle.lastPos.y)/(particle.pos.x - particle.lastPos.x)
+      let ax = particle.lastPos.x + Math.cos(rr) * sz 
+      let ay = particle.lastPos.y + Math.sin(rr)  * sz 
       if (Math.sqrt((particle.pos.x - particle.lastPos.x) ** 2 + (particle.pos.y - particle.lastPos.y) ** 2) < this.innerHeight / 2) {
-        lib.lineTo(this.ctx, particle.lastPos.x, particle.lastPos.y, particle.lastPos.x + sz, particle.lastPos.y + sz)
+        lib.lineTo(this.ctx, particle.lastPos.x, particle.lastPos.y, ax , ay)
       }
       //bounce off the sides
       if (particle.pos.x > w || particle.pos.x < 0) {
@@ -420,8 +438,8 @@ export const navier = {
         this.ctx.lineWidth = 0.9
         let pos = { x: (x * xInc) + xInc / 2, y: y * yInc + yInc / 2 }
         let to = {
-          x: (x + 0.5 + 10 * u) * xInc,
-          y: (y + 0.5 + 10 * v) * yInc,
+          x: (x + 0.5 + 50 * u) * xInc,
+          y: (y + 0.5 + 50 * v) * yInc,
         }
         lib.lineTo(this.ctx, pos.x, pos.y, to.x, to.y)
         y++
@@ -431,7 +449,7 @@ export const navier = {
   },
   start() {
     this.drawTimer = setInterval(() => { this.draw() }, this.drawTime)
-    //this.fadeTimer = setInterval(() => { this.fade() }, this.fadeTime)
+    this.fadeTimer = setInterval(() => { this.fade() }, this.fadeTime)
   },
   create() {
     return { ...parentObject, ...this }

@@ -20,6 +20,7 @@ export class Turb extends Component {
     console.log('unmount')
     this.state.canvas.cleanup()
     this.state.canvas.stop()
+    this.state.canvas = null
   }
   render() {
     return (<div className='container ' />)

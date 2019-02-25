@@ -117,7 +117,30 @@ export const navier = {
     } else{
       this.fadeTimer = setInterval(() => { this.fade() }, this.fadeTime)
     }
+  },
+  initArrays(){
+    this.arraySize = (this.settings.resolution + 2) * (this.settings.resolution + 2)
+    this.rows = this.settings.resolution + 2
+    this.vectormaps = {
+      U: new Float32Array(this.arraySize),
+      V: new Float32Array(this.arraySize),
+      D: new Float32Array(this.arraySize),
+      U_prev: new Float32Array(this.arraySize),
+      V_prev: new Float32Array(this.arraySize),
+      D_prev: new Float32Array(this.arraySize),
+      NullArray: new Float32Array(this.arraySize),
 
+    }
+    this.IX = new Array(this.rows)
+    this.initLookupTable()
+    for (let i = 0; i < this.arraySize; i++) {
+      this.vectormaps.D_prev[i] =
+        this.vectormaps.U_prev[i] =
+        this.vectormaps.V_prev[i] =
+        this.vectormaps.D[i] =
+        this.vectormaps.U[i] =
+        this.vectormaps.V[i] = this.vectormaps.NullArray[i] = 0.0
+    }
   },
   initCanvas() {
     this.canvas = document.getElementById("canvas")
@@ -156,36 +179,26 @@ export const navier = {
   },
   initData() {
     this.createParticles()
-    this.arraySize = (this.settings.resolution + 2) * (this.settings.resolution + 2)
-    this.rows = this.settings.resolution + 2
-    this.vectormaps = {
-      U: new Float32Array(this.arraySize),
-      V: new Float32Array(this.arraySize),
-      D: new Float32Array(this.arraySize),
-      U_prev: new Float32Array(this.arraySize),
-      V_prev: new Float32Array(this.arraySize),
-      D_prev: new Float32Array(this.arraySize),
-      NullArray: new Float32Array(this.arraySize),
-
-    }
-    this.IX = new Array(this.rows)
-    this.initLookupTable()
-    for (let i = 0; i < this.arraySize; i++) {
-      this.vectormaps.D_prev[i] =
-        this.vectormaps.U_prev[i] =
-        this.vectormaps.V_prev[i] =
-        this.vectormaps.D[i] =
-        this.vectormaps.U[i] =
-        this.vectormaps.V[i] = this.vectormaps.NullArray[i] = 0.0
-    }
+    this.initArrays()
     this.centerPos = (-0.5 / this.settings.resolution)
     this.scale = this.settings.resolution * 0.5
     this.dt0 = this.settings.dt * this.settings.resolution
     this.p5 = this.settings.resolution + 0.5
-    this.canvas.addEventListener('mousedown', this.mouseClick.bind(this), false)
-    this.canvas.addEventListener('mouseup', this.trackMouseButton.bind(this), false);
-    this.canvas.addEventListener('mouseleave', this.mouseLeave.bind(this), false);
+    this.mouseClick = this.mouseClick.bind(this)
+    this.trackMouseButton = this.trackMouseButton.bind(this)
+    this.mouseLeave = this.mouseLeave.bind(this)
+    this.trackMouse = this.trackMouse.bind(this)
+    this.canvas.addEventListener('mousedown', this.mouseClick, false)
+    this.canvas.addEventListener('mouseup', this.trackMouseButton, false)
+    this.canvas.addEventListener('mouseleave', this.mouseLeave, false)
     this.setFieldVectors()
+  },
+  cleanup() {
+    this.gui.destroy()
+    this.canvas.removeEventListener('mousedown', this.mouseClick, false)
+    this.canvas.removeEventListener('mouseup', this.trackMouseButton, false)
+    this.canvas.removeEventListener('mouseleave', this.mouseLeave, false)
+    this.canvas.removeEventListener('mousemove', this.trackMouse, false)
   },
   setFieldVectors() {
     let center = {
@@ -244,6 +257,9 @@ export const navier = {
     let ri = this.rows
     let mouseChanges = { dx: this.mouse.x - this.mouse.lx, dy: this.mouse.y - this.mouse.ly }
     if (mouseChanges.dx !== 0 || mouseChanges.dy !== 0) {
+      if (mouseChanges.dx > 10 || mouseChanges.dy > 10){
+        let t = 9
+      }
       let length = (Math.sqrt(mouseChanges.dx * mouseChanges.dx + mouseChanges.dy * mouseChanges.dy) + 0.5) | 0
       length = length < 1 ? 1 : length
       for (let i = 0; i < length; i++) {
@@ -256,7 +272,7 @@ export const navier = {
         this.vectormaps.D[x + y * ri] = 30
       }
     }
-    let { left, top } = lib.getTopLeftCanvas(this.canvas)
+    let { left, top } = lib.getTopLeftCanvas(this.canvas ? this.canvas : null)
     this.mouse.lx = this.mouse.x
     this.mouse.ly = this.mouse.y
     this.mouse.x = event.clientX - left
@@ -264,7 +280,7 @@ export const navier = {
   },
   trackMouseButton(e) {
     this.mouse.down = false;
-    this.canvas.removeEventListener('mousemove', this.trackMouse.bind(this), true)
+    this.canvas.removeEventListener('mousemove', this.trackMouse, false)
   },
   mouseLeave(e) {
     //reset to center
@@ -273,6 +289,7 @@ export const navier = {
     this.trackMouseButton(e)
   },
   setMouse(e) {
+    if (!this.canvas) return
     let { left, top } = lib.getTopLeftCanvas(this.canvas)
     this.mouse.x = event.clientX - left
     this.mouse.y = event.clientY - top
@@ -284,13 +301,7 @@ export const navier = {
     this.vectormaps.D.set(this.vectormaps.NullArray)
     this.vectormaps.D_prev.set(this.vectormaps.NullArray)
     this.setMouse(e)
-
-    let xInc = this.innerWidth / this.rows
-    let yInc = this.innerHeight / this.rows
-    let xi = (this.mouse.x / xInc) << 0
-    let yi = (this.mouse.y / yInc) << 0
-    this.vectormaps.D[xi + yi * this.rows] = 50
-    this.canvas.addEventListener('mousemove', this.trackMouse.bind(this), true)
+    this.canvas.addEventListener('mousemove', this.trackMouse, false)
   },
   initLookupTable() {
     for (let i = 0; i < this.rows; i++) {

@@ -24,8 +24,13 @@ export const parentObject ={
     this.addGui()
   },
   stop() {
-    clearInterval(this.fadeTimer)
-    clearInterval(this.drawTimer)
+    this.canvas = null
+    if (this.fadeTimer){
+      clearInterval(this.fadeTimer)
+    }
+    if (this.drawTimer){
+      clearInterval(this.drawTimer)
+    }
   },
   _fill(color, x, y) {
     lib._fill(this.ctx, color, x, y, this.innerWidth, this.innerHeight)

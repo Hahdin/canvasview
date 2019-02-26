@@ -199,7 +199,7 @@ export const navier = {
     this.canvas.removeEventListener('mouseup', this.trackMouseButton, false)
     this.canvas.removeEventListener('mouseleave', this.mouseLeave, false)
     this.canvas.removeEventListener('mousemove', this.trackMouse, false)
-  },
+},
   setFieldVectors() {
     let center = {
       x: this.innerWidth / 2,
@@ -460,7 +460,6 @@ export const navier = {
   },
   start() {
     this.drawTimer = setInterval(() => { this.draw() }, this.drawTime)
-    this.fadeTimer = setInterval(() => { this.fade() }, this.fadeTime)
   },
   create() {
     return { ...parentObject, ...this }

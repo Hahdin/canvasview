@@ -71,7 +71,7 @@ export const navier = {
       particleCount: this.particleCount,
       particleSize: this.particleSize,
       maxVelocity: this.maxVelocity,
-      setFieldVectors: () =>{this.setFieldVectors()},
+      setFieldVectors: () => { this.setFieldVectors() },
     }
     this.gui.add(controller, 'showTrace', 0, 1).name('Show Trace').onChange((value) => {
       if (this.showTrace === value) return
@@ -108,17 +108,17 @@ export const navier = {
       console.log('test')
     })
   },
-  setTrace(){
-    if (!this.showTrace){
-      if (this.fadeTimer){
+  setTrace() {
+    if (!this.showTrace) {
+      if (this.fadeTimer) {
         clearInterval(this.fadeTimer)
         this.fadeTimer = null
       }
-    } else{
+    } else {
       this.fadeTimer = setInterval(() => { this.fade() }, this.fadeTime)
     }
   },
-  initArrays(){
+  initArrays() {
     this.arraySize = (this.settings.resolution + 2) * (this.settings.resolution + 2)
     this.rows = this.settings.resolution + 2
     this.vectormaps = {
@@ -259,17 +259,14 @@ export const navier = {
       y: x,
     }
   },
-  touchStart(e){
+  touchStart(e) {
     this.mouseClick(e)
-    //console.log('touch start')
   },
-  touchEnd(e){
+  touchEnd(e) {
     this.trackMouseButton(e)
-    //console.log('touch end')
   },
-  touchMove(e){
+  touchMove(e) {
     this.trackMouse(e)
-    //console.log('touch end')
   },
   trackMouse(e) {
     if (!this.mouse.down) return
@@ -278,9 +275,6 @@ export const navier = {
     let ri = this.rows
     let mouseChanges = { dx: this.mouse.x - this.mouse.lx, dy: this.mouse.y - this.mouse.ly }
     if (mouseChanges.dx !== 0 || mouseChanges.dy !== 0) {
-      if (mouseChanges.dx > 10 || mouseChanges.dy > 10){
-        let t = 9
-      }
       let length = (Math.sqrt(mouseChanges.dx * mouseChanges.dx + mouseChanges.dy * mouseChanges.dy) + 0.5) | 0
       length = length < 1 ? 1 : length
       for (let i = 0; i < length; i++) {
@@ -297,7 +291,7 @@ export const navier = {
     let x = event.clientX ? event.clientX : event.touches[0] ? event.touches[0].clientX : 0
     let y = event.clientY ? event.clientY : event.touches[0] ? event.touches[0].clientY : 0
     this.mouse.lx = this.mouse.x
-    this.mouse.ly =this.mouse.y
+    this.mouse.ly = this.mouse.y
     this.mouse.x = x - left
     this.mouse.y = y - top
   },
@@ -358,7 +352,7 @@ export const navier = {
           dcolor = 255
         }
         let op = 0.4
-        if (val && dcolor < 0){
+        if (val && dcolor < 0) {
           //overflowed and reset
           dcolor = 120
         }
@@ -379,7 +373,7 @@ export const navier = {
     }
   },
   draw() {
-    if (!this.showTrace){
+    if (!this.showTrace) {
       this.ctx.fillStyle = 'black'
       lib.drawRect(this.ctx, 0, 0, this.innerWidth * 2, this.innerHeight * 2, true, false)
     }
@@ -398,13 +392,13 @@ export const navier = {
     this.particles.forEach(particle => {
       let w = this.innerWidth
       let h = this.innerHeight
-      let xInc = this.innerWidth / this.rows
-      let yInc = this.innerHeight / this.rows
+      let xInc = this.innerWidth / ri
+      let yInc = this.innerHeight / ri
       //move it
       let xi = (particle.pos.x / xInc) << 0
       let yi = (particle.pos.y / yInc) << 0
-      xi = xi > this.rows - 1 ? this.rows - 1 : xi < 0 ? 0 : xi
-      yi = yi > this.rows - 1 ? this.rows - 1 : yi < 0 ? 0 : yi
+      xi = xi > ri - 1 ? ri - 1 : xi < 0 ? 0 : xi
+      yi = yi > ri - 1 ? ri - 1 : yi < 0 ? 0 : yi
       let V = this.vectormaps.V[xi + yi * ri]
       let U = this.vectormaps.U[xi + yi * ri]
       let D = this.vectormaps.D[xi + yi * ri]
@@ -430,11 +424,11 @@ export const navier = {
       this.ctx.strokeStyle = `rgba(${color}, ${255 - dcolor}, ${255 - color}, ${1})`
       let sz = this.particleSize
       this.ctx.lineWidth = sz
-      let rr = (particle.pos.y - particle.lastPos.y)/(particle.pos.x - particle.lastPos.x)
-      let ax = particle.lastPos.x + Math.cos(rr) * sz 
-      let ay = particle.lastPos.y + Math.sin(rr)  * sz 
+      let rr = (particle.pos.y - particle.lastPos.y) / (particle.pos.x - particle.lastPos.x)
+      let ax = particle.lastPos.x + Math.cos(rr) * sz
+      let ay = particle.lastPos.y + Math.sin(rr) * sz
       if (Math.sqrt((particle.pos.x - particle.lastPos.x) ** 2 + (particle.pos.y - particle.lastPos.y) ** 2) < this.innerHeight / 2) {
-        lib.lineTo(this.ctx, particle.lastPos.x, particle.lastPos.y, ax , ay)
+        lib.lineTo(this.ctx, particle.lastPos.x, particle.lastPos.y, ax, ay)
       }
       //bounce off the sides
       if (particle.pos.x > w || particle.pos.x < 0) {
@@ -669,7 +663,6 @@ export const navier = {
       x[this.fcnIX(i, 0)] = b === 2 ? -x[this.fcnIX(i, 1)] : x[this.fcnIX(i, 1)]
       x[this.fcnIX(i, N + 1)] = b === 2 ? -x[this.fcnIX(i, N)] : x[this.fcnIX(i, N)]
     }
-    // IX\[(\w[^,]*\s?\W\s?\w\s?\w?[+]?\s?\w?)]
     x[this.fcnIX(0, 0)] = 0.5 * (x[this.fcnIX(1, 0)] + x[this.fcnIX(0, 1)])
     x[this.fcnIX(0, N + 1)] = 0.5 * (x[this.fcnIX(1, N + 1)] + x[this.fcnIX(0, N)])
     x[this.fcnIX(N + 1, 0)] = 0.5 * (x[this.fcnIX(N, 0)] + x[this.fcnIX(N + 1, 1)])

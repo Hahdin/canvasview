@@ -71,7 +71,7 @@ export const navier = {
       particleCount: this.particleCount,
       particleSize: this.particleSize,
       maxVelocity: this.maxVelocity,
-      setFieldVectors: () => { this.setFieldVectors() },
+      setFieldVectors: () => this.setFieldVectors() ,
     }
     this.gui.add(controller, 'showTrace', 0, 1).name('Show Trace').onChange((value) => {
       if (this.showTrace === value) return
@@ -103,10 +103,7 @@ export const navier = {
       if (this.maxVelocity === value) return
       this.maxVelocity = value
     })
-    this.gui.add(controller, 'setFieldVectors').name('Reset Vectors').onChange(() => {
-      this.setFieldVectors()
-      console.log('test')
-    })
+    this.gui.add(controller, 'setFieldVectors').name('Reset Vectors')
   },
   setTrace() {
     if (!this.showTrace) {

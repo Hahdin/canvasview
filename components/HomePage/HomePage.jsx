@@ -46,9 +46,13 @@ export const HomePage = ({...props}) => {
           <p>This began with following a <a href='https://www.blog.drewcutchins.com/blog/2018-8-16-flocking'> "flocking example"</a> and ended up with a few more variables to adjust. The defaults lead to a "tadpole" type flock/school and if you up the max velocity and increase the cohesion factor to 0.1, acts more like a swarm of flies. Play around and have fun.</p>
           <h2><LinkContainer to="/mathart"><NavItem>Math Art</NavItem></LinkContainer></h2>
           <p>This was something I made while working on a project that involved a lot of trig. It began simply as an attempt to visulize some of the functions.</p>
+          <h2><LinkContainer to="/fluid"><NavItem>Fluid Simulator</NavItem></LinkContainer></h2>
+          <p>My version of a popular javascript fluid simulator. The origins of this code was based on 
+            <a href='http://www.dgp.toronto.edu/people/stam/reality/Research/pdf/GDC03.pdf'> Real-Time Fluid Dynamics for Games</a>. Thanks to <a href='https://nerget.com/fluidSim/'>Oliver Hunt</a> and <a href='https://codepen.io/FWeinb/'>This Guy</a> for inspiration and doing the heavy lifting.</p>
         </div>
       </div>
     </div>
   );
 }
 export default { HomePage };
+

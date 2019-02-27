@@ -35,6 +35,9 @@ This began with following a "flocking" [tutorial](https://www.blog.drewcutchins.
 ## Math Art
 This was something I made while working on a [project](https://www.powerlogger.com/steer.asp) that involved a lot of trig. I began simply attempting to visulize some of the functions.
 
+## Fluid Simulator
+My version of a popular javascript fluid simulator. The origins of this code was based on [Real-Time Fluid Dynamics for Games](http://www.dgp.toronto.edu/people/stam/reality/Research/pdf/GDC03.pdf). Thanks to [Oliver Hunt](https://nerget.com/fluidSim/) and [This Guy](https://codepen.io/FWeinb/) for inspiration and doing the heavy lifting. 
+
 ### Some technical aspects.
 
 Some may wonder why so may "dev" modules are included in the dependancies. This is a result of the method of deploying this app to [heroku.com](https://canvasview.herokuapp.com/). Since it requires the 'npm start' to fire it all up, some packages that normally would not be inculded in the dependencies for deployment (babel, webpack) are by necessity included. This deployment is by no means to be considered an appropriate production build, it is definitely 'dev' still.

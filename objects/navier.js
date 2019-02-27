@@ -188,18 +188,27 @@ export const navier = {
     this.trackMouseButton = this.trackMouseButton.bind(this)
     this.mouseLeave = this.mouseLeave.bind(this)
     this.trackMouse = this.trackMouse.bind(this)
+    this.touchStart = this.touchStart.bind(this)
+    this.touchEnd = this.touchEnd.bind(this)
+    this.touchMove = this.touchMove.bind(this)
     this.canvas.addEventListener('mousedown', this.mouseClick, false)
     this.canvas.addEventListener('mouseup', this.trackMouseButton, false)
     this.canvas.addEventListener('mouseleave', this.mouseLeave, false)
+    this.canvas.addEventListener('touchstart', this.touchStart, false)
+    this.canvas.addEventListener('touchend', this.touchEnd, false)
+    this.canvas.addEventListener('touchmove', this.touchMove, false)
     this.setFieldVectors()
   },
   cleanup() {
     this.gui.destroy()
+    this.canvas.removeEventListener('touchmove', this.touchMove, false)
+    this.canvas.removeEventListener('touchend', this.touchEnd, false)
+    this.canvas.removeEventListener('touchstart', this.touchStart, false)
     this.canvas.removeEventListener('mousedown', this.mouseClick, false)
     this.canvas.removeEventListener('mouseup', this.trackMouseButton, false)
     this.canvas.removeEventListener('mouseleave', this.mouseLeave, false)
     this.canvas.removeEventListener('mousemove', this.trackMouse, false)
-},
+  },
   setFieldVectors() {
     let center = {
       x: this.innerWidth / 2,
@@ -250,6 +259,18 @@ export const navier = {
       y: x,
     }
   },
+  touchStart(e){
+    this.mouseClick(e)
+    //console.log('touch start')
+  },
+  touchEnd(e){
+    this.trackMouseButton(e)
+    //console.log('touch end')
+  },
+  touchMove(e){
+    this.trackMouse(e)
+    //console.log('touch end')
+  },
   trackMouse(e) {
     if (!this.mouse.down) return
     let xInc = this.innerWidth / this.rows
@@ -272,11 +293,13 @@ export const navier = {
         this.vectormaps.D[x + y * ri] = 30
       }
     }
-    let { left, top } = lib.getTopLeftCanvas(this.canvas ? this.canvas : null)
+    let { left, top } = lib.getTopLeftCanvas(this.canvas)
+    let x = event.clientX ? event.clientX : event.touches[0] ? event.touches[0].clientX : 0
+    let y = event.clientY ? event.clientY : event.touches[0] ? event.touches[0].clientY : 0
     this.mouse.lx = this.mouse.x
-    this.mouse.ly = this.mouse.y
-    this.mouse.x = event.clientX - left
-    this.mouse.y = event.clientY - top
+    this.mouse.ly =this.mouse.y
+    this.mouse.x = x - left
+    this.mouse.y = y - top
   },
   trackMouseButton(e) {
     this.mouse.down = false;
@@ -291,10 +314,12 @@ export const navier = {
   setMouse(e) {
     if (!this.canvas) return
     let { left, top } = lib.getTopLeftCanvas(this.canvas)
-    this.mouse.x = event.clientX - left
-    this.mouse.y = event.clientY - top
-    this.mouse.lx = event.clientX - left
-    this.mouse.ly = event.clientY - top
+    let x = event.clientX ? event.clientX : event.touches[0] ? event.touches[0].clientX : 0
+    let y = event.clientY ? event.clientY : event.touches[0] ? event.touches[0].clientY : 0
+    this.mouse.x = x - left
+    this.mouse.y = y - top
+    this.mouse.lx = x - left
+    this.mouse.ly = y - top
   },
   mouseClick(e) {
     this.mouse.down = true

@@ -1,26 +1,22 @@
-import React, { Component } from 'react'
-import { flockObject } from '../objects'
-class Connections extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      canvas: null
-    }
-  }
-  componentDidMount() {
-    let canvas = flockObject.create()
+import React, { useEffect } from 'react';
+import {  flockObject as _object } from '../objects'
+export const Connections = ({ ...props }) =>  {
+  let canvas = null
+  useEffect(() => {//did mount
+    if (canvas) return
+    canvas = _object.create()
     canvas.initCanvas()
     canvas._fill('rgba(0,0,0, 1)', 0, 0)
     canvas.start()
-    this.state.canvas = canvas
+    return () =>{//unmount
+      myCleanup()
+    }
+  }, []);
+
+  const myCleanup = () =>{
+    if (!canvas) return
+    canvas.cleanup()
+    canvas.stop()
   }
-  componentWillUnmount(){
-    console.log('unmount')
-    this.state.canvas.cleanup()
-    this.state.canvas.stop()
-  }
-  render() {
-    return (<div className='container ' />)
-  }
+  return (<div className='container ' />)
 }
-export default Connections

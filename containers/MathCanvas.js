@@ -1,28 +1,22 @@
-import React, { Component } from 'react'
-import { volcanoObject } from '../objects'
-class MathCanvas extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      volcano: null
+import React, { useEffect } from 'react';
+import {  volcanoObject as _object } from '../objects'
+export const MathCanvas = ({ ...props }) =>  {
+  let canvas = null
+  useEffect(() => {//did mount
+    if (canvas) return
+    canvas = _object.create()
+    canvas.initCanvas()
+    canvas._fill('rgba(0,0,0, 1)', 0, 0)
+    canvas.start()
+    return () =>{//unmount
+      myCleanup()
     }
-  }
+  }, []);
 
-  componentDidMount() {
-    let myVolcano = volcanoObject.create()
-    
-    myVolcano.initCanvas()
-    myVolcano._fill('rgba(0,0,0, 1)', 0, 0)
-    myVolcano.start()
-    this.state.volcano = myVolcano
+  const myCleanup = () =>{
+    if (!canvas) return
+    canvas.cleanup()
+    canvas.stop()
   }
-  componentWillUnmount(){
-    this.state.volcano.cleanup()
-    this.state.volcano.stop()
-    this.state.volcano = {}
-  }
-  render() {
-    return (<div />)
-  }
+  return (<div className='container ' />)
 }
-export default MathCanvas

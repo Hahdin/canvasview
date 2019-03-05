@@ -1,28 +1,23 @@
-import React, { Component } from 'react'
-import { explosionObject} from '../objects'
-class LogCanvas extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      curves: props.curves,
-      explosion: null
+import React, { useEffect } from 'react';
+import {  explosionObject as _object } from '../objects'
+export const LogCanvas = ({ ...props }) =>  {
+  let canvas = null
+  useEffect(() => {//did mount
+    if (canvas) return
+    canvas = _object.create()
+    canvas.initCanvas()
+    canvas._fill('rgba(0,0,0, 1)', 0, 0)
+    canvas.fade()
+    canvas.start()
+    return () =>{//unmount
+      myCleanup()
     }
-  }
-  componentDidMount() {
-    let myExplosion = explosionObject.create()
-    myExplosion.initCanvas()
-    myExplosion._fill('rgba(0,0,0, 1)', 0, 0)
-    myExplosion.fade()
-    myExplosion.start()
-    this.state.explosion = myExplosion
-  }
-  componentWillUnmount(){
-    this.state.explosion.cleanup()
-    this.state.explosion.stop()
-  }
+  }, []);
 
-  render() {
-    return (<div />)
+  const myCleanup = () =>{
+    if (!canvas) return
+    canvas.cleanup()
+    canvas.stop()
   }
+  return (<div className='container ' />)
 }
-export default LogCanvas

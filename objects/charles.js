@@ -93,7 +93,6 @@ export const charles = {
       this.vector.y *= -1//reverse
     }
     if (isNaN(x) || isNaN(y)){
-      console.log('??')
       x = this.environment.home.x
       y = this.environment.home.y
     }

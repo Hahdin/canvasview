@@ -38,7 +38,6 @@ const Arm = Arm ||{
   render(ctx){
     ctx.strokeStyle = this.color
     ctx.lineWidth = 5
-    console.log('render arm', this.getEndX(), this.getEndY(), this)
     lib.lineTo(ctx, this.x, this.y, this.getEndX(), this.getEndY())
   }
 }

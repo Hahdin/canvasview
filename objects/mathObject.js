@@ -55,7 +55,6 @@ export const MathObject = {
     })
   },
   initData(){
-    console.log('....init data', this)
     this.createCircles()
   },
   draw(){

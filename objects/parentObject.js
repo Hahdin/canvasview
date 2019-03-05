@@ -37,13 +37,12 @@ export const parentObject ={
   },
   create({ ...args }) {
     return {...this,  ...args }
-    //return Object.assign(Object.create(this), { ...args })
   },
   addGui(){
-    console.log('parent, should not be called')
+    //console.log('parent, should not be called')
   },
   initData(){
-    console.log('parent, should not be called')
+    //console.log('parent, should not be called')
   },
 
 }

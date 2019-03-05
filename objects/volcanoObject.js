@@ -311,7 +311,6 @@ export const volcanoObject = {
     this.ctx.fill();
   },
   projectile() {
-    console.log('..')
     if (!this.mouse.down && this.projectiles.length < this.projectileSize) {
       while (this.projectiles.length < this.projectileSize) {
         this.projectiles.push(this.createProjectile())
@@ -330,11 +329,6 @@ export const volcanoObject = {
       let vertVelY = projectile.verticalVelocity *
         Math.sin(projectile.angle * Math.PI / 180) //- ((gravity * projectile.time++) * (gravity * projectile.time++))
       vertVelY -= grav
-      if (projectile.type) {
-        if (projectile.angle > 180 && projectile.angle < 360) {
-          console.log('this  is a fw')
-        }
-      }
       let newYPos = projectile.yPos - (vertVelY)
       let newXPos = projectile.xPos + (projectile.horizontalVelocity)
       if (newYPos < this.innerHeight) {
@@ -354,7 +348,6 @@ export const volcanoObject = {
       if (projectile.verticalVelocity > 0 && vertVelY < 0) {//apex
         //blow up?
         if (Math.random() > .9 && (projectile.yPos < this.innerHeight / 2) && this.showFireworks) {
-          console.log('Boom!')
           this.createFirework(projectile, i)
           return
         }

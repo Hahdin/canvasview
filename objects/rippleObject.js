@@ -63,8 +63,8 @@ export const rippleObject = {
          this.disturb(evt.offsetX || evt.layerX, evt.offsetY || evt.layerY);
       };
 
-      this.img = new Image(500,500);
-      this.img.src = 'ripple.jpg'
+      this.img = new Image(500, 500);
+
 
       // let grad = this.ctx.createLinearGradient(0, 0, 0, this.innerHeight);
       // grad.addColorStop(0, "white");
@@ -80,17 +80,19 @@ export const rippleObject = {
       }
       // this.ctx.putImageData(this.ripple, 0, 0);
 
-		// this.randTimer = setInterval(() => {
-		// 	this.disturb(Math.random() * this.innerWidth, Math.random() * this.innerHeight);
-		// }, 1000);		
+      // this.randTimer = setInterval(() => {
+      // 	this.disturb(Math.random() * this.innerWidth, Math.random() * this.innerHeight);
+      // }, 1000);		
 
 
    },
-   loadImage(){
-      this.ctx.drawImage(this.img, 0,0);
-      this.texture = this.ctx.getImageData(0, 0, this.innerWidth, this.innerHeight);
-      this.ripple = this.ctx.getImageData(0, 0, this.innerWidth, this.innerHeight);
-
+   loadImage() {
+      this.img.src = 'ripple.jpg'
+      this.img.onload = () => {
+         this.ctx.drawImage(this.img, 0, 0);
+         this.texture = this.ctx.getImageData(0, 0, this.innerWidth, this.innerHeight);
+         this.ripple = this.ctx.getImageData(0, 0, this.innerWidth, this.innerHeight);
+      }
    },
    initCanvas() {
       this.canvas = document.getElementById("canvas")
@@ -102,8 +104,7 @@ export const rippleObject = {
       this.initData()
    },
    draw() {
-      console.log('draw')
-      if (!this.loaded){
+      if (!this.loaded) {
          this.loaded = true;
          this.loadImage()
          return;
@@ -187,13 +188,13 @@ export const rippleObject = {
    },
    start() {
       this.drawTimer = setInterval(() => { this.draw() }, this.drawTime)
-      this.frameTimer = setInterval(() => {this.newFrame() }, 60)
+      this.frameTimer = setInterval(() => { this.newFrame() }, 60)
    },
    stop() {
       clearInterval(this.drawTimer);
       clearInterval(this.randTimer);
       clearInterval(this.frameTimer);
-      
+
    },
    create() {
       return { ...parentObject, ...this }

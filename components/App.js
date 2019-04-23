@@ -13,6 +13,7 @@ import { history } from '../helpers'
 import { MyNavBar } from '../components/MyNavBar';
 import { HomePage } from '../components/HomePage';
 import { World } from '../containers/World';
+import { Ripple } from '../containers/Ripple';
 import { Turb } from '../containers/Turb';
 export const App = ({ ...props }) => {
   const { path } = props.match;
@@ -34,6 +35,7 @@ export const App = ({ ...props }) => {
             <Route path={`${path}mathart`} component={MathArt} />
             <Route path={`${path}world`} component={World} />
             <Route path={`${path}fluid`} component={Turb} />
+            <Route path={`${path}ripple`} component={Ripple} />
             
           </div>
         </Router>

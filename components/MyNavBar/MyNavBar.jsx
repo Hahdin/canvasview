@@ -48,6 +48,9 @@ export const MyNavBar = ({ ...props }) => {
           <LinkContainer to="/fluid">
             <NavItem eventKey={10}  > Fluid Simulator </NavItem>
           </LinkContainer>
+          <LinkContainer to="/ripple">
+            <NavItem eventKey={11}  > Ripples </NavItem>
+          </LinkContainer>
           {/* <LinkContainer to="/world">
             <NavItem eventKey={9}  > World </NavItem>
           </LinkContainer> */}

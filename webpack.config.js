@@ -27,6 +27,7 @@ module.exports = {
     historyApiFallback: true,
     inline: true,
     port: 4555,
+    contentBase: path.join(__dirname, 'dist')
   },
   externals: {
     // global app config object
@@ -51,7 +52,14 @@ module.exports = {
       use:[{
         loader: 'style-loader, css-loader',
       }]
+    },
+    {
+      test: /\.(png|jpg)$/,
+      use:[{
+        loader: 'url-loader?limit=8192',
+      }]
     }
+
   ]
   }
 }

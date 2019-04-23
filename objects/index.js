@@ -13,5 +13,6 @@ export * from './searchBot'
 export * from './searchBots'
 export * from './world'
 export * from './navier'
+export * from './rippleObject'
 
 

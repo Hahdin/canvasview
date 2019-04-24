@@ -1,7 +1,5 @@
 const dat = require('dat.gui');
-import { lib } from '../helpers/'
 import parentObject from './parentObject'
-import { LoadingManager } from 'three';
 export const rippleObject = {
    innerWidth: 0,
    innerHeight: 0,
@@ -64,25 +62,12 @@ export const rippleObject = {
       };
 
       this.img = new Image(500, 500);
-
-
-      // let grad = this.ctx.createLinearGradient(0, 0, 0, this.innerHeight);
-      // grad.addColorStop(0, "white");
-      // grad.addColorStop(0.2, "blue");
-      // grad.addColorStop(0.4, "blueviolet");
-      // grad.addColorStop(0.6, "blue");
-      // grad.addColorStop(0.8, "blueviolet");
-      // grad.addColorStop(1, "white  ");
-      // this.ctx.fillStyle = grad;
-      // this.ctx.fillRect(0, 0, this.innerWidth, this.innerHeight);
       for (var i = 0; i < this.size; i++) {
          this.last_map[i] = this.ripplemap[i] = 0;
       }
-      // this.ctx.putImageData(this.ripple, 0, 0);
-
-      // this.randTimer = setInterval(() => {
-      // 	this.disturb(Math.random() * this.innerWidth, Math.random() * this.innerHeight);
-      // }, 1000);		
+      this.randTimer = setInterval(() => {
+      	this.disturb(Math.random() * this.innerWidth, Math.random() * this.innerHeight);
+      }, 1500 + Math.random() * 5000);		
 
 
    },
@@ -124,8 +109,9 @@ export const rippleObject = {
          _td = this.texture.data,
          _half_width = this.half_width,
          _half_height = this.half_height;
-      for (let y = 0; y < _height; y++) {
-         for (let x = 0; x < _width; x++) {
+      let px = 1;
+      for (let y = 0; y < _height; y += px) {
+         for (let x = 0; x < _width; x += px) {
             let _newind = this.newind + i, _mapind = this.oldind + i;
             data = (
                _ripplemap[_mapind - _width] +
@@ -135,8 +121,8 @@ export const rippleObject = {
 
             data -= _ripplemap[_newind];
             this.shift++;
-            if (this.shift > 10)
-               this.shift = 5;
+            if (this.shift > 8)
+               this.shift = 4;
             data -= data >> this.shift;
             _ripplemap[_newind] = data;
             //where data = 0 then still, where data > 0 then wave
@@ -158,7 +144,8 @@ export const rippleObject = {
                _rd[cur_pixel + 1] = _td[new_pixel + 1];
                _rd[cur_pixel + 2] = _td[new_pixel + 2];
             }
-            ++i;
+           // ++i;
+            i += px;
          }
       }
 
@@ -167,18 +154,18 @@ export const rippleObject = {
       dx <<= 0;
       dy <<= 0;
       this.riprad++;
-      if (this.riprad > 6)
-         this.riprad = 3;
+      if (this.riprad > 8)
+         this.riprad = 1;
       for (let j = dy - this.riprad; j < dy + this.riprad; j++) {
          for (let k = dx - this.riprad; k < dx + this.riprad; k++) {
             let dlx = k - dx;
             let dly = j - dy;
-            this.DepthMap(dlx, dly);
+            this.depthMap(dlx, dly);
             this.ripplemap[this.oldind + (j * this.innerWidth) + k] += (64 * this.z) << 0;
          }
       }
    },
-   DepthMap(dx, dy) {
+   depthMap(dx, dy) {
       let wave = 8;
       let train = 3.4;
       let r = (Math.sqrt(dx * dx + dy * dy) - this.riprad) / wave;

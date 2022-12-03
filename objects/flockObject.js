@@ -153,10 +153,16 @@ export const flockObject = {
       //fin = fin >= 10 ? fin : 10
       this.ctx.fillStyle = boid.color
       this.ctx.strokeStyle = boid.color
+      this.ctx.shadowColor = boid.scolor;
+      this.ctx.shadowOffsetX = 1;
+      this.ctx.shadowOffsetY = 1;
+      this.ctx.shadowBlur = 10;
+
       lib.drawSphere(this.ctx, { x: boid.position.x, y: boid.position.y }, boid.radius)
       let heading = boid.getheading()
       let lineX = fin * Math.cos(heading - wing)
       let lineY = fin * Math.sin(heading - wing)
+      this.ctx.strokeStyle = boid.scolor
       lib.lineTo(this.ctx, boid.position.x, boid.position.y, boid.position.x + lineX, boid.position.y + lineY)
       lineX = -fin * Math.cos(heading + wing)
       lineY = -fin * Math.sin(heading + wing)
@@ -218,8 +224,8 @@ const _Boid = {
     }
     this.updatePosition()
     if (neighbors.length <= 0){
-      this.velocity.x += ( -(this.maxVelocity / 2) + Math.random()* this.maxVelocity)
-      this.velocity.y += ( -(this.maxVelocity / 2) + Math.random() * this.maxVelocity) 
+      this.velocity.x += ( -(this.maxVelocity / 2) + Math.random()* this.maxVelocity) / 10;
+      this.velocity.y += ( -(this.maxVelocity / 2) + Math.random() * this.maxVelocity) / 10;
     }
   },
   calculateAlignment(neighbors) {
@@ -228,8 +234,8 @@ const _Boid = {
     neighbors.forEach(neighbor => {
       let distance = Math.abs(Math.sqrt(((this.position.x - neighbor.position.x) ** 2) + ((this.position.y - neighbor.position.y) ** 2)))
       if (distance < this.alignmentDistance) {
-        averageVelocity.x += (neighbor.velocity.x * neighbor.mass);
-        averageVelocity.y += (neighbor.velocity.y * neighbor.mass);
+        averageVelocity.x += (neighbor.velocity.x * neighbor.mass) / 10;
+        averageVelocity.y += (neighbor.velocity.y * neighbor.mass) / 10;
         count++;
       }
     })
@@ -241,6 +247,7 @@ const _Boid = {
       x: averageVelocity.x * this.alignmentStrength,
       y: averageVelocity.y * this.alignmentStrength
     };
+    //console.log(alignmentForce);
     return alignmentForce
   },
   calculateCohesion(neighbors) {
@@ -369,7 +376,8 @@ const _Flock ={
         maxVelocity : this.maxVelocity,
         consideration : this.consideration,
         ctx : this.ctx,
-        color : `rgb(${~~(Math.random() * 255)},${~~(Math.random() * 255)}, ${~~(Math.random() * 255)} )`,
+        color : `rgba(${~~(Math.random() * 255)},${~~(Math.random() * 255)}, ${~~(Math.random() * 255)}, ${(Math.random())} )`,
+        scolor : `rgba(${(Math.random() * 255)},${~~(Math.random() * 255)}, ${~~(Math.random() * 255)}, 0.6 )`,
         radius : rad,
         mass : rad,
       })
